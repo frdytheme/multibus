@@ -1,18 +1,10 @@
 {
   "appKey": {
-    "EncodeKey": "1T6VAqlqBMZtm0VI9%2BKQTJbr0qv3mTlGjPfnDyCJB8MMKxuGVl%2BXUpj88z%2BnT2TUd4rbpMQqGPLCTZt9dH2%2Bug%3D%3D",
-    "DecodeKey": "1T6VAqlqBMZtm0VI9+KQTJbr0qv3mTlGjPfnDyCJB8MMKxuGVl+XUpj88z+nT2TUd4rbpMQqGPLCTZt9dH2+ug=="
+    "encoding": "1T6VAqlqBMZtm0VI9%2BKQTJbr0qv3mTlGjPfnDyCJB8MMKxuGVl%2BXUpj88z%2BnT2TUd4rbpMQqGPLCTZt9dH2%2Bug%3D%3D",
+    "decoding": "1T6VAqlqBMZtm0VI9+KQTJbr0qv3mTlGjPfnDyCJB8MMKxuGVl+XUpj88z+nT2TUd4rbpMQqGPLCTZt9dH2+ug=="
   },
-  "BusGrade": {
-    "key": "getSuberbsBusGradList"
-  },
-  "BusTerminList": {
-    "key": "getSuberbsBusTrminlList"
-  },
-  "BusStartArrival": {
-    "key": "getStrtpntAlocFndSuberbsBusInfo"
-  },
-  "CityCode": {
-    "key": "getCtyCodeList"
-  }
+  "busGrade": "getSuberbsBusGradList",
+  "busTerminal": "getSuberbsBusTrminlList",
+  "busRoute": "getStrtpntAlocFndSuberbsBusInfo",
+  "cityCode": "getCtyCodeList"
 }
