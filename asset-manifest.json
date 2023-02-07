@@ -1,16 +1,10 @@
 {
   "files": {
-    "main.css": "/multibus/static/css/main.073c9b0a.css",
-    "main.js": "/multibus/static/js/main.a847b50c.js",
-    "static/js/787.04c06520.chunk.js": "/multibus/static/js/787.04c06520.chunk.js",
-    "static/media/logo.svg": "/multibus/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "main.js": "/multibus/static/js/main.7778d3b8.js",
     "index.html": "/multibus/index.html",
-    "main.073c9b0a.css.map": "/multibus/static/css/main.073c9b0a.css.map",
-    "main.a847b50c.js.map": "/multibus/static/js/main.a847b50c.js.map",
-    "787.04c06520.chunk.js.map": "/multibus/static/js/787.04c06520.chunk.js.map"
+    "main.7778d3b8.js.map": "/multibus/static/js/main.7778d3b8.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.a847b50c.js"
+    "static/js/main.7778d3b8.js"
   ]
 }
