@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { busAPI } from "../asset/DB/requestUrl";
+import { busAPI, mainList, mainTerminal, showTerminal, Terminal1 } from "../asset/DB/requestUrl";
 
 const TerminalOption = styled.ul`
   text-align: center;
@@ -9,6 +9,7 @@ const TerminalOption = styled.ul`
   width: 500px;
   height: 700px;
   background-color: #fff;
+  padding: 30px;
   h2 {
     font-size: 20px;
     padding: 20px;
@@ -30,15 +31,34 @@ const TerminalOption = styled.ul`
       }
     }
   }
+  p {
+    text-align: left;
+    font-weight: bold;
+    padding: 15px;
+  }
+  .mainTerminal {
+    ul {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: repeat(3, 1fr);
+      gap: 5px;
+      li {
+        font-size: 13px;
+        padding: 0 10px;
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
 `;
 
 function TerminalModal() {
   const [city, setCity] = useState([]);
-  // const [terminal, setTerminal] = useState([]);
-  // const [route, setRoute] = useState([]);
-  // const [grade, setGrade] = useState([]);
-  // const [cityCode, setCityCode] = useState();
-  const [mainCity, setMainCity] = useState([]);
+  const [terminal, setTerminal] = useState([]);
 
   const fetchCity = async () => {
     try {
@@ -50,52 +70,22 @@ function TerminalModal() {
     }
   };
 
-  // const fetchMainCity = async () => {
-  //   const mainList = [
-  //     "동서울",
-  //     "원주",
-  //     "인천공항1터미널",
-  //     "인천공항2터미널",
-  //     "서울남부",
-  //     "인천",
-  //     "광주(유·스퀘어)",
-  //     "대전복합",
-  //     "성남",
-  //     "대구서부",
-  //     "천안",
-  //     "청주",
-  //   ];
-  //   try {
-  //     const res = await axios.get(busAPI.getTerminal(mainList.forEach(city => city)));
-  //     const currentRes = res.data.response.body.items.item;
-  //     setMainCity([currentRes]);
-  //   } catch (err) {
-  //     console.log(err + "터미널을 찾을 수 없습니다.");
-  //   }
-  // };
-
-  // const requestCode = async () => {
-  //   try {
-  //     const TERMINAL = await axios.get(busAPI.getTerminal());
-  //     setTerminal(TERMINAL.data.response.body.items.item);
-  //   } catch (err) {
-  //     console.log(err + "terminal 데이터를 불러오지 못했습니다.");
-  //   }
-  // };
-
-  /*  
-    REST API를 요청하는 URL이 길고 복잡해서 json파일로 만들어서 제어하고 필요한 문서에서는 함수로 요청할 수 있도록 API 관련 js파일을 만들어서 관리.
-  */
+  const fetchTerminal = async () => {
+    try {
+      const res = await axios.get(busAPI.getTerminal({city:11}));
+      setTerminal(res.data.response.body);
+    } catch (err) {
+      console.log(err + "terminal 데이터를 불러오지 못했습니다.");
+    }
+  };
 
   useEffect(() => {
     fetchCity();
-    fetchMainCity();
+    fetchTerminal();
   }, []);
 
-  // useEffect(() => {
-  //   requestCode();
-  // }, [cityCode]);
-  console.log(mainCity);
+  console.log(terminal)
+  // console.log(Terminal1())
 
   return (
     <TerminalOption>
@@ -107,7 +97,7 @@ function TerminalModal() {
           <fieldset>
             <label>
               지역선택
-              <select name="terminalList" id="terminalList">
+              <select name="cityList" id="cityList">
                 <option value="전체">전체</option>
                 {city.map((city) => {
                   const { cityCode, cityName } = city;
@@ -126,12 +116,18 @@ function TerminalModal() {
             </label>
           </fieldset>
         </form>
-        <div className="Headterminal">
-          <p>주요 출발지</p>
-          <ul>
-            <li></li>
-          </ul>
-        </div>
+      </li>
+      <li className="mainTerminal">
+        <p>주요 출발지</p>
+        <ul>
+          {mainList.map((list) => {
+            return <li key={list.id}>{list.name}</li>;
+          })}
+        </ul>
+      </li>
+      <li className="departTerminal">
+        <p>출발지 선택</p>
+        <ul>{}</ul>
       </li>
     </TerminalOption>
   );
