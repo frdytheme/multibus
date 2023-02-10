@@ -2,81 +2,101 @@ import styled from "styled-components";
 import TerminalBox from "./TerminalBox";
 import TicketForm from "./TicketForm";
 
-const TicketBox = styled.section`
-  h1 {
-    text-align: center;
-    font-size: 2em;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    padding: 30px;
-  }
-  article {
-    width: 1200px;
+const TicketingBox = styled.section`
+  width: 800px;
+  height: 300px;
+  color: #000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+  div {
     display: flex;
-    margin: 0 auto;
-    dl {
-      border-top: 5px solid #000;
-      width: 210px;
-      margin-right: 30px;
-      dt {
-        font-weight: bold;
-        font-size: 28px;
-      }
-      dd {
-        color: #666;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    overflow: hidden;
+    line-height: 60px;
+    font-size: 22px;
+    text-indent: 50px;
+    a {
+      width: 50%;
+      background-color: #eee;
+      &:first-child {
+        background-color: #fff;
       }
     }
-    aside {
-      width: 100%;
-      display: flex;
-      div {
-        background-color: light;
-        width: 50%;
+  }
+  .ticketBox {
+    width: 100%;
+    height: 200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr 1fr;
+    gap: 10px;
+    li {
+      background-color: #eee;
+      border-radius: 7px;
+      padding: 15px 20px;
+      p {
+        font-size: 17px;
+        cursor: pointer;
       }
-      form {
-        width: 100%;
-        border: 1px solid #000;
-        .travelMode {
-          text-align: center;
-          width: 500px;
-          margin-top: 50px;
-          label {
-            margin: 0 15px;
+      &.choicePlace {
+        background-color: transparent;
+        display: flex;
+        padding: 0;
+        gap: 10px;
+        position: relative;
+        p {
+          background-color: #eee;
+          width: 50%;
+          border-radius: 7px;
+          padding: 15px 20px;
+          span {
+            margin-top: 15px;
+            display: block;
+            font-size: 20px;
+            color: #999;
           }
         }
-        ul {
-          padding: 50px 0;
-          li {
-            padding: 0 90px;
-            margin: 20px 0;
-            span {
-              display: inline-block;
-              width: 100px;
-              text-align: left;
-              line-height: 32px;
-            }
-            input {
-              width: 300px;
-              height: 30px;
-              padding: 0;
-              border-radius: 7px;
-              text-indent: 10px;
-              &[name="Date"] {
-                width: 200px;
-              }
-            }
-            select {
-              border-radius: 7px;
-              height: 30px;
-              &[name="setTime"] {
-                width: 90px;
-                margin-left: 10px;
-              }
-              &[name="peoples"] {
-                width: 300px;
-              }
-            }
+        .toggleIcon {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          background-color: #fff;
+          border-radius: 50%;
+          text-indent: -9999px;
+          border: 1px solid #ddd;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          cursor: pointer;
+          &:hover {
+            border-color: lightblue;
           }
+        }
+      }
+      .seatGrade {
+        display: flex;
+        margin-top: 15px;
+        li {
+          width: 25%;
+          padding: 0;
+        }
+      }
+      &:last-child {
+        padding: 0;
+        button {
+          border: none;
+          width: 100%;
+          height: 100%;
+          font-size: 20px;
+          background-color: #b8becc;
+          border-radius: 7px;
+          color: #fff;
         }
       }
     }
@@ -85,25 +105,38 @@ const TicketBox = styled.section`
 
 function Ticketing() {
   return (
-    <>
-      <TerminalBox />
-      <TicketBox>
-        <h1>승차권 예매</h1>
-        <article>
-          <dl>
-            <dt>기초 정보 입력</dt>
-            <dd>시외버스 예매 시스템으로 안전하고 편리하게 여행하세요.</dd>
-          </dl>
-          <aside>
-            <div>
-              <h2>승차권 예매</h2>
-              <p>시외버스 예매 시스템으로 안전하고 편리하게 여행하세요.</p>
-            </div>
-            <TicketForm />
-          </aside>
-        </article>
-      </TicketBox>
-    </>
+    <TicketingBox>
+      <div>
+        <a href="#">편도</a>
+        <a href="#">왕복</a>
+      </div>
+      <ul className="ticketBox">
+        <li className="choicePlace">
+          <p>
+            출발지<span>선택</span>
+          </p>
+          <div className="toggleIcon">출발지 도착지 반전</div>
+          <p>
+            도착지<span>선택</span>
+          </p>
+        </li>
+        <li>
+          <p>가는날</p>
+        </li>
+        <li>
+          <p>등급</p>
+          <ul className="seatGrade">
+            <li>전체</li>
+            <li>프리미엄</li>
+            <li>우등</li>
+            <li>일반</li>
+          </ul>
+        </li>
+        <li>
+          <button>조회하기</button>
+        </li>
+      </ul>
+    </TicketingBox>
   );
 }
 

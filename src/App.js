@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
+import Main from "./components/Main";
 import Navigation from "./components/Navigation";
-import Ticketing from "./components/Ticketing";
 
 function App() {
   return (
     <>
-      <Navigation />
       <Routes>
-        <Route path="/" element={<Ticketing />} />
+        {/* <Route path="/" element={<Ticketing />} /> */}
+        <Route path="/" element={<Main />} />
       </Routes>
     </>
   );

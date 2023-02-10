@@ -1,15 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { busAPI, mainList, mainTerminal, showTerminal, Terminal1 } from "../asset/DB/requestUrl";
+import { busAPI, mainList2 } from "../asset/DB/requestUrl";
 
 const TerminalOption = styled.ul`
   text-align: center;
   margin: 150px auto;
   width: 500px;
-  height: 700px;
   background-color: #fff;
-  padding: 30px;
+  padding: 20px;
   h2 {
     font-size: 20px;
     padding: 20px;
@@ -54,11 +53,36 @@ const TerminalOption = styled.ul`
       }
     }
   }
+  .placeList {
+    ul {
+      height: 200px;
+      border: 1px solid #000;
+      overflow-y: scroll;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: left;
+      grid-auto-rows: 40px;
+      li {
+        border-bottom: 1px solid #d9d9d9;
+        line-height: 40px;
+        text-indent: 20px;
+        &:nth-child(even) {
+          border-left: 1px solid #d9d9d9;
+        }
+        &:hover {
+          background-color: #ddd;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 `;
 
 function TerminalModal() {
   const [city, setCity] = useState([]);
-  const [terminal, setTerminal] = useState([]);
+  const [mainTerm, setMainTerm] = useState([]);
+  const [placeList, setPlaceList] = useState([]);
+  const [cityCode, setCityCode] = useState("");
 
   const fetchCity = async () => {
     try {
@@ -70,22 +94,43 @@ function TerminalModal() {
     }
   };
 
-  const fetchTerminal = async () => {
+  const fetchMainTerm = async () => {
     try {
-      const res = await axios.get(busAPI.getTerminal({city:11}));
-      setTerminal(res.data.response.body);
+      const res = await axios.get(busAPI.getTerminal({ list: 2117 }));
+      const result = res.data.response.body.items.item;
+      const currentRes = mainList2.map((name) => {
+        return result.filter((nm) => nm.terminalNm === name)[0];
+      });
+      setMainTerm(currentRes);
     } catch (err) {
-      console.log(err + "terminal 데이터를 불러오지 못했습니다.");
+      console.log(err + "주요 터미널 정보를 불러오지 못했습니다.");
     }
+  };
+
+  const setTermList = async () => {
+    try {
+      const res = await axios.get(
+        busAPI.getTerminal({ city: cityCode, list: 500 })
+      );
+      const result = res.data.response.body.items.item;
+      setPlaceList(result);
+    } catch (err) {
+      console.log(err + "터미널을 불러오지 못했습니다.");
+    }
+  };
+
+  const handleChangeCity = (e) => {
+    setCityCode(e.target.value);
   };
 
   useEffect(() => {
     fetchCity();
-    fetchTerminal();
+    fetchMainTerm();
   }, []);
 
-  console.log(terminal)
-  // console.log(Terminal1())
+  useEffect(() => {
+    setTermList();
+  }, [cityCode]);
 
   return (
     <TerminalOption>
@@ -97,12 +142,15 @@ function TerminalModal() {
           <fieldset>
             <label>
               지역선택
-              <select name="cityList" id="cityList">
-                <option value="전체">전체</option>
+              <select
+                name="cityList"
+                id="cityList"
+                onChange={(e) => handleChangeCity(e)}>
+                <option value="">전체</option>
                 {city.map((city) => {
                   const { cityCode, cityName } = city;
                   return (
-                    <option value={cityName} key={cityCode}>
+                    <option value={cityCode} key={cityCode}>
                       {cityName}
                     </option>
                   );
@@ -120,14 +168,18 @@ function TerminalModal() {
       <li className="mainTerminal">
         <p>주요 출발지</p>
         <ul>
-          {mainList.map((list) => {
-            return <li key={list.id}>{list.name}</li>;
+          {mainTerm.map((list) => {
+            return <li key={list.terminalId}>{list.terminalNm}</li>;
           })}
         </ul>
       </li>
-      <li className="departTerminal">
+      <li className="placeList">
         <p>출발지 선택</p>
-        <ul>{}</ul>
+        <ul>
+          {placeList.sort().map((list) => {
+            return <li key={list.terminalId}>{list.terminalNm}</li>;
+          })}
+        </ul>
       </li>
     </TerminalOption>
   );
