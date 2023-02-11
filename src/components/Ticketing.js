@@ -1,27 +1,30 @@
-import styled from "styled-components";
-import TerminalBox from "./TerminalBox";
-import TicketForm from "./TicketForm";
 
-const TicketingBox = styled.section`
-  width: 800px;
+import { useEffect} from "react";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { fetchCityCode } from "../store/fetchCitySlice";
+import { fetchTrml } from "../store/fetchTrmlSlice";
+
+const TicketingOption = styled.section`
+  width: 750px;
   height: 300px;
   color: #000;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -48%);
   text-align: left;
   div {
     display: flex;
     width: 100%;
-    height: 60px;
-    margin-bottom: 10px;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 8px;
     border-radius: 7px;
     overflow: hidden;
-    line-height: 60px;
-    font-size: 22px;
-    text-indent: 50px;
-    a {
+    font-size: 18px;
+    text-indent: 55px;
+    p {
       width: 50%;
       background-color: #eee;
       &:first-child {
@@ -31,34 +34,34 @@ const TicketingBox = styled.section`
   }
   .ticketBox {
     width: 100%;
-    height: 200px;
+    height: 175px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     li {
       background-color: #eee;
-      border-radius: 7px;
-      padding: 15px 20px;
+      border-radius: 5px;
+      padding: 17px 20px;
       p {
-        font-size: 17px;
+        font-size: 14px;
         cursor: pointer;
       }
       &.choicePlace {
         background-color: transparent;
         display: flex;
         padding: 0;
-        gap: 10px;
+        gap: 8px;
         position: relative;
         p {
           background-color: #eee;
           width: 50%;
-          border-radius: 7px;
-          padding: 15px 20px;
+          border-radius: 5px;
+          padding: 17px 20px;
           span {
-            margin-top: 15px;
+            margin-top: 10px;
             display: block;
-            font-size: 20px;
+            font-size: 19px;
             color: #999;
           }
         }
@@ -95,7 +98,7 @@ const TicketingBox = styled.section`
           height: 100%;
           font-size: 20px;
           background-color: #b8becc;
-          border-radius: 7px;
+          border-radius: 5px;
           color: #fff;
         }
       }
@@ -103,40 +106,50 @@ const TicketingBox = styled.section`
   }
 `;
 
-function Ticketing() {
+function Ticketing({ setBoxToggle, boxToggle }) {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCityCode());
+    dispatch(fetchTrml({}))
+  }, []);
+
   return (
-    <TicketingBox>
-      <div>
-        <a href="#">편도</a>
-        <a href="#">왕복</a>
-      </div>
-      <ul className="ticketBox">
-        <li className="choicePlace">
-          <p>
-            출발지<span>선택</span>
-          </p>
-          <div className="toggleIcon">출발지 도착지 반전</div>
-          <p>
-            도착지<span>선택</span>
-          </p>
-        </li>
-        <li>
-          <p>가는날</p>
-        </li>
-        <li>
-          <p>등급</p>
-          <ul className="seatGrade">
-            <li>전체</li>
-            <li>프리미엄</li>
-            <li>우등</li>
-            <li>일반</li>
-          </ul>
-        </li>
-        <li>
-          <button>조회하기</button>
-        </li>
-      </ul>
-    </TicketingBox>
+    <>
+      <TicketingOption>
+        <div>
+          <p>편도</p>
+          <p>왕복</p>
+        </div>
+        <ul className="ticketBox">
+          <li className="choicePlace">
+            <p onClick={() => setBoxToggle(!boxToggle)}>
+              출발지<span>선택</span>
+            </p>
+            <div className="toggleIcon">출발지 도착지 반전</div>
+            <p onClick={() => setBoxToggle(!boxToggle)}>
+              도착지<span>선택</span>
+            </p>
+          </li>
+          <li>
+            <p>가는날</p>
+          </li>
+          <li>
+            <p>등급</p>
+            <ul className="seatGrade">
+              <li>전체</li>
+              <li>프리미엄</li>
+              <li>우등</li>
+              <li>일반</li>
+            </ul>
+          </li>
+          <li>
+            <button>조회하기</button>
+          </li>
+        </ul>
+      </TicketingOption>
+    </>
   );
 }
 

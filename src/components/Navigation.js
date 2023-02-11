@@ -11,6 +11,7 @@ const Nav = styled.nav`
 `;
 
 function Navigation(props) {
+
   return (
     <Nav>
       <h1>임시 내비게이션</h1>
