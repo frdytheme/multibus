@@ -2,8 +2,10 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { focusBorder } from "../asset/style/commonStyle";
+import { setArrTrml } from "../store/arrTrmlSlice";
 import { setTrml } from "../store/departTrmlSlice";
 import { findTrml } from "../store/showTrmlSlice";
+import { modalClose } from "../store/ticketModalToggleSlice";
 
 const SearchTerminal = styled.li`
   border-top: 1px solid #aaa;
@@ -43,6 +45,7 @@ const SearchTerminal = styled.li`
     font-size: 13px;
     width: 620px;
     position: absolute;
+    z-index: 99;
     li {
       background-color: #f9f9f9;
       padding: 12px;
@@ -60,7 +63,20 @@ const SearchTerminal = styled.li`
 function SearchTrml() {
   const dispatch = useDispatch();
   const showTrml = useSelector((state) => state.showTrml.result);
-  const trmlList = useSelector(state=>state.trmlList.data);
+  const trmlList = useSelector((state) => state.trmlList.data);
+  const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
+
+  const arrTrmlList = useSelector((state) => state.expRoute.data);
+
+  const currentRoute = arrTrmlList.filter((trml, idx, route) => {
+    return route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx;
+  });
+
+  const alignRoute = currentRoute.sort((a, b) => {
+    if (a.arrPlaceNm > b.arrPlaceNm) return 1;
+    if (a.arrPlaceNm < b.arrPlaceNm) return -1;
+    return 0;
+  });
 
   return (
     <SearchTerminal>
@@ -72,23 +88,44 @@ function SearchTrml() {
       />
       <span className="material-symbols-outlined">search</span>
       <span className="material-symbols-outlined">close</span>
-      <ul className="searchResult">
-        {showTrml &&
-          trmlList
-            .filter((trml) => trml.terminalNm.includes(showTrml))
-            .map((result) => {
-              return (
-                <li
-                  key={result.terminalId}
-                  onClick={() => {
-                    dispatch(setTrml(result.terminalNm));
-                    dispatch(findTrml(""));
-                  }}>
-                  {result.terminalNm}
-                </li>
-              );
-            })}
-      </ul>
+      {depTrml ? (
+        <ul className="searchResult">
+          {showTrml &&
+            alignRoute
+              .filter((trml) => trml.arrPlaceNm.includes(showTrml))
+              .map((result) => {
+                return (
+                  <li
+                    key={result.routeId}
+                    onClick={() => {
+                      dispatch(setArrTrml(result));
+                      dispatch(findTrml(""));
+                      dispatch(modalClose());
+                    }}>
+                    {result.arrPlaceNm}
+                  </li>
+                );
+              })}
+        </ul>
+      ) : (
+        <ul className="searchResult">
+          {showTrml &&
+            trmlList
+              .filter((trml) => trml.terminalNm.includes(showTrml))
+              .map((result) => {
+                return (
+                  <li
+                    key={result.terminalId}
+                    onClick={() => {
+                      dispatch(setTrml(result.terminalNm));
+                      dispatch(findTrml(""));
+                    }}>
+                    {result.terminalNm}
+                  </li>
+                );
+              })}
+        </ul>
+      )}
     </SearchTerminal>
   );
 }

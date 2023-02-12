@@ -1,8 +1,7 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { focusBorder } from "../asset/style/commonStyle";
-import { changeDep } from "../store/departTrmlSlice";
+import { changeDep, setTrml } from "../store/departTrmlSlice";
 
 const SetTrml = styled.li`
   display: flex;
@@ -29,9 +28,6 @@ const SetTrml = styled.li`
     &.focus {
       ${focusBorder}
       background-color: #fff;
-      span {
-        display: none;
-      }
     }
     &.change {
       ${focusBorder}
@@ -57,17 +53,21 @@ const SetTrml = styled.li`
 `;
 
 function SetPlace() {
+  const dispatch = useDispatch();
+
   const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
   const depStatus = useSelector((state) => state.depTrml.status);
-  const dispatch = useDispatch();
+
+  const arrTrml = useSelector((state) => state.arrTrml.data);
+
   return (
     <SetTrml>
-      <p className={`${depTrml || "focus"} ${depStatus && "change"}`} onClick={() => dispatch(changeDep())}>
+      <p className={`${depTrml || "focus"} ${depStatus && "change"}`} onClick={() => dispatch(setTrml(""))}>
         출발지<span>{depTrml}</span>
       </p>
       <div className="arrow">화살표</div>
       <p className={`${depStatus || (depTrml && "focus")}`}>
-        도착지<span>선택</span>
+        도착지<span>{arrTrml ? arrTrml.arrPlaceNm : "선택"}</span>
       </p>
     </SetTrml>
   );

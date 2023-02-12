@@ -38,6 +38,11 @@ const MainSection = styled.main`
         margin-bottom: 15px;
         cursor: pointer;
       }
+      span {
+        color: var(--blue-color);
+        font-size: 2.5em;
+        line-height: 53px;
+      }
     }
   }
 `;
@@ -53,19 +58,34 @@ function Main() {
         <h1>즐거운 여행의 시작과 끝, 프리미엄 버스와 함께!</h1>
         <ul className="subGnb">
           <li>
-            <div className="subBtn"></div>고속버스예매
+            <div className="subBtn">
+              <span className="material-symbols-outlined">directions_bus</span>
+            </div>
+            고속버스예매
           </li>
           <li>
-            <div className="subBtn"></div>예매확인
+            <div className="subBtn">
+              <span className="material-symbols-outlined">select_check_box</span>
+            </div>
+            예매확인
           </li>
           <li>
-            <div className="subBtn"></div>도착시간안내
+            <div className="subBtn">
+              <span className="material-symbols-outlined">alarm_on</span>
+            </div>
+            도착시간안내
           </li>
           <li>
-            <div className="subBtn"></div>프리패스
+            <div className="subBtn">
+              <span className="material-symbols-outlined">local_activity</span>
+            </div>
+            프리패스
           </li>
           <li>
-            <div className="subBtn"></div>휠체어사이트
+            <div className="subBtn">
+              <span className="material-symbols-outlined">wheelchair_pickup</span>
+            </div>
+            휠체어사이트
           </li>
         </ul>
         <Ticketing />

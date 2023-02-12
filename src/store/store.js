@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import arrivalTrml from "./arrTrmlSlice";
 import departTrml from "./departTrmlSlice";
 import CityCodeReducer from "./fetchCitySlice";
 import fetchRouteSlice from "./fetchRouteSlice";
@@ -12,6 +13,7 @@ export const store = configureStore({
     cityCode: CityCodeReducer,
     trmlList: trmlListReducer,
     depTrml: departTrml,
+    arrTrml: arrivalTrml,
     showTrml: showTrmlSlice,
     setTrmlNum: setTrmlByNumSlice,
     modalSwitch: ticketModalToggleSlice,

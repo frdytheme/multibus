@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTrml } from "../store/departTrmlSlice";
+import { setArrTrml } from "../store/arrTrmlSlice";
+import { modalToggle } from "../store/ticketModalToggleSlice";
 
 function ArrTrmlList() {
   const dispatch = useDispatch();
   const trmlNum = useSelector((state) => state.setTrmlNum.num);
   const arrTrmlList = useSelector((state) => state.expRoute.data);
-  const fetchStatus = useSelector((state) => state.expRoute.status);
 
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {
     return route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx;
@@ -27,7 +27,8 @@ function ArrTrmlList() {
                 <li
                   key={trml.routeId}
                   onClick={() => {
-                    dispatch(setTrml(trml));
+                    dispatch(setArrTrml(trml));
+                    dispatch(modalToggle());
                   }}>
                   {trml.arrPlaceNm}
                 </li>
@@ -40,14 +41,15 @@ function ArrTrmlList() {
                   <li
                     key={trml.routeId}
                     onClick={() => {
-                      dispatch(setTrml(trml));
+                      dispatch(setArrTrml(trml));
+                      dispatch(modalToggle());
                     }}>
                     {trml.arrPlaceNm}
                   </li>
                 );
               })}
-        {alignRoute.length < 1 ? <li>현재 시간 예매 가능한 터미널이 없습니다.</li> : null}
       </ul>
+      {alignRoute.length < 1 ? <strong>현재 시간 예매 가능한 터미널이 없습니다.</strong> : null}
     </>
   );
 }

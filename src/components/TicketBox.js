@@ -53,8 +53,7 @@ function TicketBox() {
   const dispatch = useDispatch();
   const depTrml = useSelector((state) => state.depTrml.data);
   const depState = useSelector((state) => state.depTrml.status);
-  console.log(depState)
-  console.log(depTrml)
+  
   return (
     <TicketModal>
       <div

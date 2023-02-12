@@ -73,7 +73,7 @@ function TrmlList() {
   const mainList = useRef(null);
   const dispatch = useDispatch();
   const depTrml = useSelector((state) => state.depTrml.data);
-  const depState = useSelector((state) => state.depTrml.status);
+  const arrTrml = useSelector((state) => state.arrTrml.data);
   const depId = depTrml.terminalId;
   const fetchStatus = useSelector((state) => state.expRoute.status);
 

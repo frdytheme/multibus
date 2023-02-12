@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchCityCode } from "../store/fetchCitySlice";
 import { fetchTrml } from "../store/fetchTrmlSlice";
 import { modalToggle } from "../store/ticketModalToggleSlice";
+import { initArrTrml } from "../store/arrTrmlSlice";
+import { initTrml } from "../store/departTrmlSlice";
 
 const TicketingOption = styled.section`
-  width: 750px;
+  width: 770px;
   height: 300px;
   color: #000;
   position: absolute;
@@ -108,6 +110,8 @@ const TicketingOption = styled.section`
 
 function Ticketing() {
   const dispatch = useDispatch();
+  const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
+  const arrTrml = useSelector((state) => state.arrTrml.data.arrPlaceNm);
 
   useEffect(() => {
     dispatch(fetchCityCode());
@@ -118,17 +122,28 @@ function Ticketing() {
     <>
       <TicketingOption>
         <div>
-          <p>편도</p>
+          <p>
+          <span className="material-symbols-outlined">trending_flat</span>
+            편도
+          </p>
           <p>왕복</p>
         </div>
         <ul className="ticketBox">
           <li className="choicePlace">
-            <p onClick={() => dispatch(modalToggle())}>
-              출발지<span>선택</span>
+            <p
+              onClick={() => {
+                dispatch(modalToggle());
+                dispatch(initArrTrml());
+                dispatch(initTrml());
+              }}>
+              출발지<span style={depTrml && { color: "#000" }}>{depTrml ? depTrml : "선택"}</span>
             </p>
             <div className="toggleIcon">출발지 도착지 반전</div>
-            <p onClick={() => dispatch(modalToggle())}>
-              도착지<span>선택</span>
+            <p
+              onClick={() => {
+                dispatch(modalToggle());
+              }}>
+              도착지<span style={depTrml && { color: "#000" }}>{arrTrml ? arrTrml : "선택"}</span>
             </p>
           </li>
           <li>
