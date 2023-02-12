@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Banner from "./Banner";
 import Footer from "./Footer";
@@ -42,12 +42,12 @@ const MainSection = styled.main`
   }
 `;
 
-function Main(props) {
-  const [boxToggle, setBoxToggle] = useState(false);
+function Main() {
+  const modalToggle = useSelector((state) => state.modalSwitch);
 
   return (
     <>
-      {boxToggle && <TicketBox boxToggle={boxToggle} setBoxToggle={setBoxToggle} />}
+      {modalToggle && <TicketBox />}
       <Navigation />
       <MainSection>
         <h1>즐거운 여행의 시작과 끝, 프리미엄 버스와 함께!</h1>
@@ -68,7 +68,7 @@ function Main(props) {
             <div className="subBtn"></div>휠체어사이트
           </li>
         </ul>
-        <Ticketing setBoxToggle={setBoxToggle} boxToggle={boxToggle} />
+        <Ticketing />
         <Banner />
       </MainSection>
       <Footer />

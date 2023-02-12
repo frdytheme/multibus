@@ -10,7 +10,7 @@ const Nav = styled.nav`
   left:0;
 `;
 
-function Navigation(props) {
+function Navigation() {
 
   return (
     <Nav>

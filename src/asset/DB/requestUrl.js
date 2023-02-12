@@ -9,6 +9,11 @@ const month = ("0" + (date.getMonth() + 1)).slice(0, 2);
 const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 const today = `${year}${month}${day}`;
 export const nowDay = year + "-" + month + "-" + day;
+let hour = date.getHours();
+let minutes = date.getMinutes();
+let min = minutes < 10 ? "0" + minutes : minutes;
+export const nowTime = `${hour}${min}`;
+export const depTime = `${today}${nowTime}` * 1;
 
 export const busAPI = {
   // 고속 버스 등급 호출
@@ -18,7 +23,7 @@ export const busAPI = {
   getCity: `http://apis.data.go.kr/1613000/ExpBusInfoService/getCtyCodeList?serviceKey=${appKey.encoding}&_type=json`,
 
   // 고속 버스 출발지 / 도착지기반 정보 호출
-  getRoute: (dep = "NAEK010", arr = "NAEK300", date = today, list = 100, grade = "") =>
+  getRoute: (dep = "NAEK010", arr = "", date = today, list = 10000, grade = "") =>
     `http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo?serviceKey=${
       appKey.encoding
     }&depTerminalId=${dep}&arrTerminalId=${arr}&depPlandTime=${date}&numOfRows=${list}&pageNo=1&${

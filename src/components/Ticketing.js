@@ -1,9 +1,9 @@
-
-import { useEffect} from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { fetchCityCode } from "../store/fetchCitySlice";
 import { fetchTrml } from "../store/fetchTrmlSlice";
+import { modalToggle } from "../store/ticketModalToggleSlice";
 
 const TicketingOption = styled.section`
   width: 750px;
@@ -106,13 +106,12 @@ const TicketingOption = styled.section`
   }
 `;
 
-function Ticketing({ setBoxToggle, boxToggle }) {
-
+function Ticketing() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCityCode());
-    dispatch(fetchTrml({}))
+    dispatch(fetchTrml({}));
   }, []);
 
   return (
@@ -124,11 +123,11 @@ function Ticketing({ setBoxToggle, boxToggle }) {
         </div>
         <ul className="ticketBox">
           <li className="choicePlace">
-            <p onClick={() => setBoxToggle(!boxToggle)}>
+            <p onClick={() => dispatch(modalToggle())}>
               출발지<span>선택</span>
             </p>
             <div className="toggleIcon">출발지 도착지 반전</div>
-            <p onClick={() => setBoxToggle(!boxToggle)}>
+            <p onClick={() => dispatch(modalToggle())}>
               도착지<span>선택</span>
             </p>
           </li>

@@ -4,7 +4,13 @@ import { busAPI } from "../asset/DB/requestUrl";
 
 export const fetchTrml = createAsyncThunk("trmlList/fetchTrmlList", async ({ name, list }) => {
   const res = await axios.get(busAPI.getTerminal(name, list));
-  return res.data.response.body.items.item;
+  const result = res.data.response.body.items.item;
+  const currentRes = result.sort((a, b) => {
+    if (a.terminalNm > b.terminalNm) return 1;
+    if (a.terminalNm < b.terminalNm) return -1;
+    return 0;
+  });
+  return currentRes;
 });
 
 export const trmlListSlice = createSlice({
