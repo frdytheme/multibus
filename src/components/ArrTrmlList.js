@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setArrTrml } from "../store/arrTrmlSlice";
 import { modalToggle } from "../store/ticketModalToggleSlice";
+import { depTime } from "../asset/DB/requestUrl";
 
 function ArrTrmlList() {
   const dispatch = useDispatch();
@@ -9,7 +10,9 @@ function ArrTrmlList() {
   const arrTrmlList = useSelector((state) => state.expRoute.data);
 
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {
-    return route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx;
+    return (
+      route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx
+    );
   });
 
   const alignRoute = currentRoute.sort((a, b) => {
@@ -49,7 +52,9 @@ function ArrTrmlList() {
                 );
               })}
       </ul>
-      {alignRoute.length < 1 ? <strong>현재 시간 예매 가능한 터미널이 없습니다.</strong> : null}
+      {alignRoute.length < 1 ? (
+        <strong>현재 시간 예매 가능한 터미널이 없습니다.</strong>
+      ) : null}
     </>
   );
 }

@@ -55,7 +55,7 @@ function MainTrmlList() {
       <ul>
         {mainTrml.map((trml) => {
           return (
-            <li key={trml.terminalId} onClick={(e) => dispatch(setTrml(trml))}>
+            <li key={trml.terminalId} onClick={() => dispatch(setTrml(trml))}>
               {trml.terminalNm}
             </li>
           );

@@ -99,9 +99,11 @@ function TrmlList() {
     });
   };
 
+  console.log(arrTrml)
+
   useEffect(() => {
     onMainTrml();
-    dispatch(fetchRoute({ dep: depId, arr: "" }));
+    dispatch(fetchRoute({ dep: depId }));
   }, [depId]);
 
   return (
