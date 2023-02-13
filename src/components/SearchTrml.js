@@ -1,11 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { focusBorder } from "../asset/style/commonStyle";
+import { focusBorder } from "../asset/style/GlobalStyle";
 import { setArrTrml } from "../store/arrTrmlSlice";
 import { setTrml } from "../store/departTrmlSlice";
 import { findTrml } from "../store/showTrmlSlice";
 import { modalClose } from "../store/ticketModalToggleSlice";
+import { allDepTrmlList } from "../asset/DB/allDepTrmlList";
+import { fetchRoute } from "../store/fetchRouteSlice";
 
 const SearchTerminal = styled.li`
   border-top: 1px solid #aaa;
@@ -63,15 +65,15 @@ const SearchTerminal = styled.li`
 function SearchTrml() {
   const dispatch = useDispatch();
   const showTrml = useSelector((state) => state.showTrml.result);
-  const trmlList = useSelector((state) => state.trmlList.data);
+  const trmlList = [...allDepTrmlList];
   const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
-
   const arrTrmlList = useSelector((state) => state.expRoute.data);
+  const depDate = useSelector((state) => state.getDate.depDate);
 
+  // 출발지 선택 시 현재 시간 기준 예매 가능한 터미널 목록 출력 로직.
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {
     return route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx;
   });
-
   const alignRoute = currentRoute.sort((a, b) => {
     if (a.arrPlaceNm > b.arrPlaceNm) return 1;
     if (a.arrPlaceNm < b.arrPlaceNm) return -1;
@@ -117,8 +119,9 @@ function SearchTrml() {
                   <li
                     key={result.terminalId}
                     onClick={() => {
-                      dispatch(setTrml(result.terminalNm));
+                      dispatch(setTrml(result));
                       dispatch(findTrml(""));
+                      dispatch(fetchRoute({ dep: result.terminalId, date: depDate }));
                     }}>
                     {result.terminalNm}
                   </li>

@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { allDepTrmlList } from "../asset/DB/allDepTrmlList";
 import { setTrml } from "../store/departTrmlSlice";
@@ -33,6 +33,7 @@ const MainTrml = styled.li`
 
 function MainTrmlList() {
   const dispatch = useDispatch();
+  const depDate = useSelector((state) => state.getDate.depDate);
   const mainFilter = [
     "서울경부",
     "센트럴시티(서울)",
@@ -61,7 +62,7 @@ function MainTrmlList() {
               key={trml.terminalId}
               onClick={() => {
                 dispatch(setTrml(trml));
-                dispatch(fetchRoute({ dep: trml.terminalId }));
+                dispatch(fetchRoute({ dep: trml.terminalId, date: depDate }));
               }}>
               {trml.terminalNm}
             </li>

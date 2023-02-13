@@ -73,7 +73,6 @@ function TrmlList() {
   const dispatch = useDispatch();
   const depTrml = useSelector((state) => state.depTrml.data);
   const fetchStatus = useSelector((state) => state.expRoute.status);
-  const fetchRoute = useSelector((state) => state.expRoute.data);
 
   const province = [
     { id: 0, name: "서울" },

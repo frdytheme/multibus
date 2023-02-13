@@ -11,14 +11,14 @@ const month = ("0" + (date.getMonth() + 1)).slice(0, 2);
 const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 const getWeek = date.getDay();
 const week = ["일", "월", "화", "수", "목", "금", "토"];
-const today = `${year}${month}${day}`;
+export const today = `${year}${month}${day}`;
 export const nowDay =
   year + ". " + month.slice(1, 2) + ". " + day + ". " + week[getWeek];
 export const nxtDay =
   year + ". " + month.slice(1, 2) + ". " + (day * 1 + 1) + ". " + week[getWeek + 1];
-let hour = date.getHours();
-let minutes = date.getMinutes();
-let min = minutes < 10 ? "0" + minutes : minutes;
+const hour = date.getHours();
+const minutes = date.getMinutes();
+const min = minutes < 10 ? "0" + minutes : minutes;
 export const nowTime = `${hour}${min}`;
 export const depTime = `${today}${nowTime}` * 1;
 

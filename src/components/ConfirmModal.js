@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { modalClose } from "../store/ticketModalToggleSlice";
 import { useNavigate } from "react-router-dom";
-import { initTrml } from "../store/departTrmlSlice";
-import { initArrTrml } from "../store/arrTrmlSlice";
 
 const ConfirmAlert = styled.div`
   height: 100vh;

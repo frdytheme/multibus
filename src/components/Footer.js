@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { path } from "../asset/DB/requestUrl";
 
@@ -6,7 +6,6 @@ const FooterBox = styled.footer`
   background-color: #2e2d3d;
   width: calc(100% - 220px);
   height: 150px;
-  /* position: fixed; */
   margin-left: auto;
   padding: 30px 20px;
   box-sizing: border-box;
@@ -51,13 +50,54 @@ const FooterBox = styled.footer`
   }
   .sideBox {
     img {
-      width: 50px;
+      width: 100px;
       object-fit: cover;
+    }
+    .otherSite {
+      font-size: 13px;
+      position: relative;
+      color: #666;
+      width: 210px;
+      height: 35px;
+      line-height: 32px;
+      border: 1px solid #666;
+      padding: 0 20px;
+      box-sizing: border-box;
+      cursor: pointer;
+      margin-bottom: 20px;
+      img {
+        width: 11px;
+        height: 6px;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      ul {
+        width: 100%;
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        user-select: none;
+        li {
+          background-color: #f9f9f9;
+          padding: 10px;
+          border-bottom: 1px solid #e6e6e6;
+          &:hover {
+            background-color: #fff;
+            color: var(--blue-color);
+            font-weight: bold;
+            cursor: pointer;
+          }
+        }
+      }
     }
   }
 `;
 
-function Footer(props) {
+function Footer() {
+  const [otherChk, setOtherChk] = useState(false);
+
   return (
     <FooterBox>
       <ul>
@@ -99,15 +139,33 @@ function Footer(props) {
           </ul>
         </li>
         <li className="copyright">
-          서울특별시 서초구 신반포로 194 통신판매업신고: 2009-서울서초 0587호
-          대표자 : 이광재
+          서울특별시 서초구 신반포로 194 통신판매업신고: 2009-서울서초 0587호 대표자 : 이광재
         </li>
-        <li className="copyright">
-          COPYRIGHT© 2016. WWW.KOBUS.CO.KR . ALL RIGHT RESERVED
-        </li>
+        <li className="copyright">COPYRIGHT© 2016. WWW.KOBUS.CO.KR . ALL RIGHT RESERVED</li>
       </ul>
       <div className="sideBox">
-        <div className="otherSite"></div>
+        <div
+          className="otherSite"
+          onClick={() => {
+            setOtherChk(!otherChk);
+          }}>
+          관련사이트
+          {otherChk ? (
+            <img src={`${path}/images/bu_selectArrow.png`} alt="" />
+          ) : (
+            <img src={`${path}/images/bu_selectArrowC.png`} alt="" />
+          )}
+          {otherChk && (
+            <ul>
+              <li>관련사이트</li>
+              <li>장애인 휠체어 사이트</li>
+              <li>국가대중교통정보센터</li>
+              <li>인천장애인콜택시</li>
+              <li>센트럴시티터미널</li>
+              <li>시외버스 통합예매시스템</li>
+            </ul>
+          )}
+        </div>
         <div className="kobusIcon">
           <img src={`${path}/images/foot_com1.png`} alt="" />
           <img src={`${path}/images/foot_com2.png`} alt="" />

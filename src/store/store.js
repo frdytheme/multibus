@@ -4,6 +4,7 @@ import departTrml from "./departTrmlSlice";
 import CityCodeReducer from "./fetchCitySlice";
 import fetchRouteSlice from "./fetchRouteSlice";
 import trmlListReducer from "./fetchTrmlSlice";
+import getDateSlice from "./getDateSlice";
 import setTrmlByNumSlice from "./setTrmlByNumSlice";
 import showTrmlSlice from "./showTrmlSlice";
 import ticketModalToggleSlice from "./ticketModalToggleSlice";
@@ -18,6 +19,7 @@ export const store = configureStore({
     setTrmlNum: setTrmlByNumSlice,
     modalSwitch: ticketModalToggleSlice,
     expRoute: fetchRouteSlice,
+    getDate: getDateSlice,
   },
 });
 
