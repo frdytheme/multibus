@@ -22,13 +22,17 @@ export const trmlListSlice = createSlice({
     builder
       .addCase(fetchTrml.pending, (state) => {
         state.status = "ready";
+        console.log("전체 터미널리스트 fetch중...")
       })
       .addCase(fetchTrml.fulfilled, (state, action) => {
         state.status = "success";
         state.data = action.payload;
+        console.log("전체 터미널리스트 fetch 완료")
+
       })
       .addCase(fetchTrml.rejected, (state) => {
         state.status = "failed";
+        console.log("전체 터미널리스트 fetch 실패")
       });
   },
 });

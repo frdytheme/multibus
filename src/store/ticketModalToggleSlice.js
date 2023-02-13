@@ -2,12 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const modalSwitch = createSlice({
   name: "modalSwitch",
-  initialState: false,
+  initialState: {
+    ticketToggle: false,
+    confirmToggle: false,
+  },
   reducers: {
-    modalToggle: (state) => (state = !state),
-    modalClose: (state) => (state = false),
+    modalToggle: (state) => {
+      state.ticketToggle = !state.ticketToggle;
+    },
+    modalClose: (state) => {
+      state.ticketToggle = false;
+      state.confirmToggle = false;
+    },
+    confirmToggle: (state) => {
+      state.confirmToggle = !state.confirmToggle;
+    },
   },
 });
 
-export const { modalToggle, modalClose } = modalSwitch.actions;
+export const { modalToggle, modalClose, confirmToggle } = modalSwitch.actions;
 export default modalSwitch.reducer;

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { path } from "../asset/DB/requestUrl";
 import Banner from "./Banner";
+import ConfirmModal from "./ConfirmModal";
 import Footer from "./Footer";
 import Navigation from "./Navigation";
 import TicketBox from "./TicketBox";
@@ -35,7 +36,6 @@ const MainSection = styled.main`
       align-items: center;
       font-size: 14px;
       .subBtn {
-        /* background-color: #fff; */
         border-radius: 50%;
         width: 53px;
         height: 53px;
@@ -85,7 +85,8 @@ const MainSection = styled.main`
 `;
 
 function Main() {
-  const modalToggle = useSelector((state) => state.modalSwitch);
+  const modalToggle = useSelector((state) => state.modalSwitch.ticketToggle);
+  const confirmToggle = useSelector((state) => state.modalSwitch.confirmToggle);
   const subGnbRef = useRef(null);
 
   const handleGnb = () => {
@@ -105,6 +106,7 @@ function Main() {
   return (
     <>
       {modalToggle && <TicketBox />}
+      {confirmToggle && <ConfirmModal />}
       <Navigation />
       <MainSection>
         <h1>즐거운 여행의 시작과 끝, 프리미엄 버스와 함께!</h1>
@@ -130,8 +132,8 @@ function Main() {
             휠체어사이트
           </li>
         </ul>
-        <Ticketing />
         <Banner />
+        <Ticketing />
       </MainSection>
       <Footer />
     </>

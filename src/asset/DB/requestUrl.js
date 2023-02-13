@@ -32,7 +32,7 @@ export const busAPI = {
   getCity: `http://apis.data.go.kr/1613000/ExpBusInfoService/getCtyCodeList?serviceKey=${appKey.encoding}&_type=json`,
 
   // 고속 버스 출발지 / 도착지기반 정보 호출
-  getRoute: (dep = "NAEK010", arr = "", date = today, list = 1000, grade = "") =>
+  getRoute: (dep = "NAEK010", arr = "", date = today, list = 8000, grade = "") =>
     `http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo?serviceKey=${
       appKey.encoding
     }&depTerminalId=${dep}&arrTerminalId=${arr}&depPlandTime=${date}&numOfRows=${list}&pageNo=1&${

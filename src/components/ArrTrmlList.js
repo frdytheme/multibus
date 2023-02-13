@@ -2,19 +2,19 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setArrTrml } from "../store/arrTrmlSlice";
 import { modalToggle } from "../store/ticketModalToggleSlice";
-import { depTime } from "../asset/DB/requestUrl";
 
 function ArrTrmlList() {
   const dispatch = useDispatch();
   const trmlNum = useSelector((state) => state.setTrmlNum.num);
   const arrTrmlList = useSelector((state) => state.expRoute.data);
+  const fetchStatus = useSelector((state) => state.expRoute.status);
 
+  // 출도착지 기반 예매 가능한 터미널 목록 = 중복 제거 / 이름순 정렬 로직
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {
     return (
       route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx
     );
   });
-
   const alignRoute = currentRoute.sort((a, b) => {
     if (a.arrPlaceNm > b.arrPlaceNm) return 1;
     if (a.arrPlaceNm < b.arrPlaceNm) return -1;
@@ -52,7 +52,7 @@ function ArrTrmlList() {
                 );
               })}
       </ul>
-      {alignRoute.length < 1 ? (
+      {fetchStatus === "success" && alignRoute.length < 1 ? (
         <strong>현재 시간 예매 가능한 터미널이 없습니다.</strong>
       ) : null}
     </>

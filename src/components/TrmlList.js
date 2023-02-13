@@ -1,26 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { fetchRoute } from "../store/fetchRouteSlice";
 import { setTrmlNum } from "../store/setTrmlByNumSlice";
 import ArrTrmlList from "./ArrTrmlList";
 import DepTrmlList from "./DepTrmlList";
 
 const TrmlBoard = styled.li`
   position: relative;
-  .loading {
-    position: absolute;
-    width: 500px;
-    padding: 20px 0;
-    font-size: 18px;
-    text-align: center;
-    background-color: rgba(0,0,0,.7);
-    color: #fff;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 7px;
-  }
   p {
     margin-top: 15px;
     padding: 15px 12px 8px 15px;
@@ -67,15 +53,27 @@ const TrmlBoard = styled.li`
       }
     }
   }
+  .loading {
+    position: absolute;
+    width: 500px;
+    padding: 20px 0;
+    font-size: 18px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 7px;
+  }
 `;
 
 function TrmlList() {
   const mainList = useRef(null);
   const dispatch = useDispatch();
   const depTrml = useSelector((state) => state.depTrml.data);
-  const arrTrml = useSelector((state) => state.arrTrml.data);
-  const depId = depTrml.terminalId;
   const fetchStatus = useSelector((state) => state.expRoute.status);
+  const fetchRoute = useSelector((state) => state.expRoute.data);
 
   const province = [
     { id: 0, name: "서울" },
@@ -99,12 +97,9 @@ function TrmlList() {
     });
   };
 
-  console.log(arrTrml)
-
   useEffect(() => {
     onMainTrml();
-    dispatch(fetchRoute({ dep: depId }));
-  }, [depId]);
+  }, []);
 
   return (
     <TrmlBoard>
@@ -117,19 +112,27 @@ function TrmlList() {
             </li>
             {province.map((province) => {
               return (
-                <li key={province.id} id={province.id} onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
+                <li
+                  key={province.id}
+                  id={province.id}
+                  onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
                   {province.name}
                 </li>
               );
             })}
           </ul>
         </div>
-        <div className="cityItem">{depTrml ? <ArrTrmlList /> : <DepTrmlList />}</div>
+        <div className="cityItem">
+          {depTrml ? <ArrTrmlList /> : <DepTrmlList />}
+        </div>
       </div>
-      {fetchStatus === "success" || (
+      {(depTrml && fetchStatus === "ready") && (
         <div className="loading">
-          {fetchStatus === "ready" && "예매 가능한 터미널을 검색중입니다..."}
-          {fetchStatus === "rejected" && "터미널 검색에 실패했습니다.(통신 오류)"}
+          {fetchStatus === "ready"
+            ? "예매가 가능한 터미널 검색 중..."
+            : fetchStatus === "failed"
+            ? "터미널 검색에 실패했습니다."
+            : null}
         </div>
       )}
     </TrmlBoard>

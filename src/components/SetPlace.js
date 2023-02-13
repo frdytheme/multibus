@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { focusBorder } from "../asset/style/commonStyle";
-import { changeDep, setTrml } from "../store/departTrmlSlice";
+import { setTrml } from "../store/departTrmlSlice";
 
 const SetTrml = styled.li`
   display: flex;

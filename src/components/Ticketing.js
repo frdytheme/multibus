@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCityCode } from "../store/fetchCitySlice";
-import { fetchTrml } from "../store/fetchTrmlSlice";
-import { modalToggle } from "../store/ticketModalToggleSlice";
+import { confirmToggle, modalToggle } from "../store/ticketModalToggleSlice";
 import { initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml } from "../store/departTrmlSlice";
 import { nowDay, nxtDay, path } from "../asset/DB/requestUrl";
@@ -349,32 +348,60 @@ function Ticketing() {
     });
   };
 
+  const confirmAlert = () => {
+    alert(
+      "당일출발차량의 경우 예매 후 당일취소를 하셔도 취소위약금이 청구되오니 유의 바랍니다."
+    );
+    dispatch(confirmToggle());
+  };
+
+  // 출도착지 초기화 함수.
+  const initPlace = () => {
+    dispatch(initTrml());
+    dispatch(initArrTrml());
+  };
+
   useEffect(() => {
     handleGradeChk();
     dispatch(fetchCityCode());
-    dispatch(fetchTrml({}));
   }, []);
 
   return (
     <>
       <TicketingOption>
         <div>
-          <p className={`${oneWay || "on"}`} onClick={() => setOneWay(false)}>
+          <p
+            className={`${oneWay || "on"}`}
+            onClick={() => {
+              setOneWay(false);
+              depTrml || initPlace();
+            }}>
             편도
             <span className="directWay">
               <span
                 className={`${check || "checked"}`}
-                onClick={() => setCheck(false)}>
+                onClick={() => {
+                  setCheck(false);
+                  depTrml || initPlace();
+                }}>
                 직통
               </span>
               <span
                 className={`${check && "checked"}`}
-                onClick={() => setCheck(true)}>
+                onClick={() => {
+                  setCheck(true);
+                  initPlace();
+                }}>
                 환승
               </span>
             </span>
           </p>
-          <p className={`${oneWay && "on"}`} onClick={() => setOneWay(true)}>
+          <p
+            className={`${oneWay && "on"}`}
+            onClick={() => {
+              setOneWay(true);
+              initPlace();
+            }}>
             왕복
           </p>
         </div>
@@ -431,7 +458,11 @@ function Ticketing() {
             </ul>
           </li>
           <li>
-            <button className={`${depTrml && arrTrml && "full"}`}>
+            <button
+              className={`${depTrml && arrTrml && "full"}`}
+              onClick={() => {
+                depTrml && arrTrml && confirmAlert();
+              }}>
               조회하기
             </button>
           </li>
