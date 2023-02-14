@@ -1,8 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { modalClose } from "../store/ticketModalToggleSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchRoute } from "../store/fetchRouteSlice";
 
 const ConfirmAlert = styled.div`
   height: 100vh;
@@ -116,6 +117,21 @@ const ConfirmAlert = styled.div`
 function ConfirmModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const depId = useSelector((state) => state.depTrml.data.terminalId);
+  const arrId = useSelector((state) => state.arrTrml.data.terminalId);
+  const depDate = useSelector((state) => state.getDate.depDate);
+
+
+  // const getRouteByGrade = () => {
+  //   dispatch(
+  //     fetchRoute({
+  //       dep: depId,
+  //       arr: arrId,
+  //       date: depDate,
+  //       list: 50,
+  //     })
+  //   );
+  // };
 
   return (
     <ConfirmAlert>
@@ -202,7 +218,15 @@ function ConfirmModal() {
           <div
             onClick={() => {
               dispatch(modalClose());
-              navigate(`/routeSearch`);
+              navigate(`/routeInfo`);
+              // dispatch(
+              //   fetchRoute({
+              //     dep: depId,
+              //     arr: arrId,
+              //     date: depDate,
+              //     list: 50,
+              //   })
+              // );
             }}>
             동의
           </div>

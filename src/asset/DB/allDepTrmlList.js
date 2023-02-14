@@ -227,3 +227,14 @@ export const allDepTrmlList = [
   { terminalId: "NAEK238", terminalNm: "횡성(휴)하행" },
   { terminalId: "NAEK634", terminalNm: "흥덕" },
 ];
+
+export const allGradeList = [
+  { gradeId: 1, gradeNm: "우등" },
+  { gradeId: 2, gradeNm: "고속" },
+  { gradeId: 3, gradeNm: "심야우등" },
+  { gradeId: 4, gradeNm: "심야고속" },
+  { gradeId: 5, gradeNm: "일반" },
+  { gradeId: 6, gradeNm: "일반심야" },
+  { gradeId: 7, gradeNm: "프리미엄" },
+  { gradeId: 8, gradeNm: "심야프리미엄" },
+];

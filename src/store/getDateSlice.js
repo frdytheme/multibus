@@ -1,11 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { depTime, nowDay, nxtDay, today } from "../asset/DB/requestUrl";
+import {
+  currnetDepTime,
+  depTime,
+  nowDay,
+  nxtDay,
+  today,
+} from "../asset/DB/requestUrl";
 
 const initialState = {
   depDate: today,
   depTime: depTime,
   showToday: nowDay,
   showNxtday: nxtDay,
+  currentDepTime: currnetDepTime,
 };
 
 export const getDateSlice = createSlice({
@@ -24,8 +31,12 @@ export const getDateSlice = createSlice({
     inputNxtday: (state, action) => {
       state.showNxtday = action.payload;
     },
+    inputCurrentTime: (state, action) => {
+      state.currentDepTime = action.payload;
+    },
   },
 });
 
-export const { inputDepDate, inputDepTime, inputToday, inputNxtday } = getDateSlice.actions;
+export const { inputDepDate, inputDepTime, inputToday, inputNxtday } =
+  getDateSlice.actions;
 export default getDateSlice.reducer;

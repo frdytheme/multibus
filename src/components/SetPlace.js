@@ -57,17 +57,21 @@ function SetPlace() {
 
   const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
   const depStatus = useSelector((state) => state.depTrml.status);
-
-  const arrTrml = useSelector((state) => state.arrTrml.data);
+  const arrTrml = useSelector((state) => state.arrTrml.data.terminalNm);
 
   return (
     <SetTrml>
-      <p className={`${depTrml || "focus"} ${depStatus && "change"}`} onClick={() => dispatch(setTrml(""))}>
+      <p
+        className={`${depTrml || "focus"} ${depStatus && "change"}`}
+        onClick={() => dispatch(setTrml(""))}>
         출발지<span>{depTrml}</span>
       </p>
-      <div className="arrow">화살표</div>
+      <div
+        className="arrow" >
+        화살표
+      </div>
       <p className={`${depStatus || (depTrml && "focus")}`}>
-        도착지<span>{arrTrml ? arrTrml.arrPlaceNm : "선택"}</span>
+        도착지<span>{arrTrml ? arrTrml : "선택"}</span>
       </p>
     </SetTrml>
   );

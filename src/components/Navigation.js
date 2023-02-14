@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { path } from "../asset/DB/requestUrl";
+import { Link } from "react-router-dom";
 
 const Nav = styled.nav`
   width: 220px;
@@ -10,16 +11,19 @@ const Nav = styled.nav`
   top: 0;
   left: 0;
   letter-spacing: -0.4px;
+  border-right: 1px solid #ddd;
   h1 {
-    font-size: 13px;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 45px;
-    cursor: pointer;
-    img {
-      margin-bottom: 12px;
+    a {
+      font-size: 13px;
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 45px;
+      cursor: pointer;
+      img {
+        margin-bottom: 12px;
+      }
     }
   }
   .mainGnb {
@@ -86,8 +90,10 @@ function Navigation() {
   return (
     <Nav>
       <h1>
-        <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
-        고속버스통합예매
+        <Link to="/">
+          <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
+          고속버스통합예매
+        </Link>
       </h1>
       <ul className="mainGnb">
         <li>고속버스예매</li>

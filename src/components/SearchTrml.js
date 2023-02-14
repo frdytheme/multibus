@@ -70,7 +70,7 @@ function SearchTrml() {
   const arrTrmlList = useSelector((state) => state.expRoute.data);
   const depDate = useSelector((state) => state.getDate.depDate);
 
-  // 출발지 선택 시 현재 시간 기준 예매 가능한 터미널 목록 출력 로직.
+  // 중복된 터미널 제거, 이름 순 정렬.
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {
     return route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx;
   });

@@ -6,10 +6,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <Routes>
-        {/* <Route path="/" element={<Ticketing />} /> */}
-        <Route path="/" element={<Main />} />
-      </Routes>
+      <Main />
     </>
   );
 }

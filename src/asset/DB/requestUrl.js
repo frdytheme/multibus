@@ -15,12 +15,30 @@ export const today = `${year}${month}${day}`;
 export const nowDay =
   year + ". " + month.slice(1, 2) + ". " + day + ". " + week[getWeek];
 export const nxtDay =
-  year + ". " + month.slice(1, 2) + ". " + (day * 1 + 1) + ". " + week[getWeek + 1];
-const hour = date.getHours();
+  year +
+  ". " +
+  month.slice(1, 2) +
+  ". " +
+  (day * 1 + 1) +
+  ". " +
+  week[getWeek + 1];
+
+// 1시간 전 목록부터 불러올 수 있게 현재 시간 -1시간
+const currentHour = date.getHours();
+let hour = date.getHours();
+if (hour > 0) {
+  hour -= 1;
+} else if (hour === 0) {
+  hour = 23;
+}
 const minutes = date.getMinutes();
 const min = minutes < 10 ? "0" + minutes : minutes;
 export const nowTime = `${hour}${min}`;
+export const currentTime = `${currentHour}${min}`
 export const depTime = `${today}${nowTime}` * 1;
+export const currnetDepTime = `${today}${currentTime}` * 1;
+
+console.log(typeof hour, hour);
 
 export const path = process.env.PUBLIC_URL;
 
@@ -32,7 +50,13 @@ export const busAPI = {
   getCity: `http://apis.data.go.kr/1613000/ExpBusInfoService/getCtyCodeList?serviceKey=${appKey.encoding}&_type=json`,
 
   // 고속 버스 출발지 / 도착지기반 정보 호출
-  getRoute: (dep = "NAEK010", arr = "", date = today, list = 8000, grade = "") =>
+  getRoute: (
+    dep = "NAEK010",
+    arr = "",
+    date = today,
+    list = 8000,
+    grade = ""
+  ) =>
     `http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo?serviceKey=${
       appKey.encoding
     }&depTerminalId=${dep}&arrTerminalId=${arr}&depPlandTime=${date}&numOfRows=${list}&pageNo=1&${

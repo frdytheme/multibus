@@ -1,16 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { busAPI, depTime } from "../asset/DB/requestUrl";
+import { busAPI, depTime, today } from "../asset/DB/requestUrl";
 
 export const fetchRoute = createAsyncThunk(
   "expRoute/fetchExpRoute",
   async ({ dep, arr, date, list, grade }) => {
     const res = await axios.get(busAPI.getRoute(dep, arr, date, list, grade));
     const result = res.data.response.body.items.item;
-    const currentRes = result.filter((route) => {
-      return route.depPlandTime > depTime;
-    });
-    return currentRes;
+
+    // 날짜가 오늘이면 현재 시간 이후로 운행하는 경로만 필터링.
+    // 날짜가 오늘 이후면 모든 시간 경로 return.
+    if (date !== today) {
+      return result;
+    } else {
+      const currentRes = result.filter((route) => {
+        return route.depPlandTime > depTime;
+      });
+      return currentRes;
+    }
   }
 );
 
