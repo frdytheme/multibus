@@ -10,11 +10,12 @@ const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 const getWeek = date.getDay();
 const week = ["일", "월", "화", "수", "목", "금", "토"];
 export const today = `${year}${month}${day}`;
+export const tommorrow = `${year}${month}${new Date(date.setDate(date.getDate() + 1)).getDate()}`;
 export const nowDay = year + ". " + month.slice(1, 2) + ". " + day + ". " + week[getWeek];
 export const nxtDay = year + ". " + month.slice(1, 2) + ". " + (day * 1 + 1) + ". " + week[getWeek + 1];
 
 // 1시간 전 목록부터 불러올 수 있게 현재 시간 -1시간
-const currentHour = date.getHours();
+export const currentHour = date.getHours();
 let hour = date.getHours();
 if (hour > 0) {
   hour -= 1;
@@ -26,6 +27,7 @@ const min = minutes < 10 ? "0" + minutes : minutes;
 export const nowTime = `${hour < 10 ? "0" + hour : hour}${min}`;
 export const currentTime = `${currentHour < 10 ? "0" + currentHour : currentHour}${min}`;
 export const depTime = `${today}${nowTime}` * 1;
+export const nxtDepTime = `${tommorrow}${nowTime}` * 1;
 export const currentDepTime = `${today}${currentTime}` * 1;
 
 export const path = process.env.PUBLIC_URL;

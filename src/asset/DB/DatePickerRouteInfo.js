@@ -9,16 +9,15 @@ import {
   inputCurrentTime,
   inputDepDate,
   inputDepTime,
-  inputNewDate,
   inputNxtday,
   inputToday,
 } from "../../store/getDateSlice";
 
 const DatePickerCustom = () => {
   const dispatch = useDispatch();
-  const depDate = useSelector((state) => state.getDate);
+  const newDate = useSelector((state) => state.getDate.newDate);
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(JSON.parse(newDate));
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <img
       src={`${path}/images/ico_calender.png`}
@@ -75,12 +74,11 @@ const DatePickerCustom = () => {
 
     dispatch(inputToday(nowDay));
     dispatch(inputNxtday(nxtDay));
-    dispatch(inputNewDate(JSON.stringify(new Date())));
   };
 
   return (
     <DatePicker
-      selected={startDate}
+      selected={JSON.parse(newDate)}
       onChange={(date) => {
         setStartDate(date);
         setDateandTime(date);

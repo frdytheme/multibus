@@ -5,9 +5,10 @@ import { fetchCityCode } from "../store/fetchCitySlice";
 import { confirmToggle, modalToggle } from "../store/ticketModalToggleSlice";
 import { changeArrDep, initArrTrml, setArrTrml } from "../store/arrTrmlSlice";
 import { initTrml, setTrml } from "../store/departTrmlSlice";
-import { path } from "../asset/DB/requestUrl";
+import { nxtDepTime, path } from "../asset/DB/requestUrl";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { setGrade } from "../store/getGradeSlice";
+import { inputDepDate } from "../store/getDateSlice";
 
 const TicketingOption = styled.section`
   width: 750px;
@@ -359,8 +360,6 @@ function Ticketing() {
     });
   };
 
-
-
   // 조회하기 클릭 시 알림창
   const confirmAlert = () => {
     alert(
@@ -467,7 +466,11 @@ function Ticketing() {
               </span>
               <span
                 className={`${dateChk && "checked"}`}
-                onClick={() => setDateChk(true)}>
+                onClick={() => {
+                  setDateChk(true);
+                  dispatch(inputDepDate(nxtDepTime));
+                  console.log(nxtDepTime);
+                }}>
                 내일
               </span>
               <DatePickerCustom />
