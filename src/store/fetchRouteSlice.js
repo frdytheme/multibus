@@ -27,13 +27,16 @@ export const getExpRoute = createSlice({
     builder
       .addCase(fetchRoute.pending, (state) => {
         state.status = "ready";
+        console.log("fetchRoute pending");
       })
       .addCase(fetchRoute.fulfilled, (state, action) => {
         state.status = "success";
         state.data = action.payload;
+        console.log("fetchRoute start");
       })
       .addCase(fetchRoute.rejected, (state) => {
         state.status = "failed";
+        console.log("fetchRoute rejected");
       });
   },
 });

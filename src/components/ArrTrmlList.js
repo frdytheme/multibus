@@ -11,9 +11,7 @@ function ArrTrmlList() {
 
   // 출도착지 기반 예매 가능한 터미널 목록 = 중복 제거 / 이름순 정렬 로직
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {
-    return (
-      route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx
-    );
+    return route.findIndex((item) => item.arrPlaceNm === trml.arrPlaceNm) === idx;
   });
   const alignRoute = currentRoute.sort((a, b) => {
     if (a.arrPlaceNm > b.arrPlaceNm) return 1;
@@ -54,6 +52,8 @@ function ArrTrmlList() {
       </ul>
       {fetchStatus === "success" && alignRoute.length < 1 ? (
         <strong>현재 시간 예매 가능한 터미널이 없습니다.</strong>
+      ) : fetchStatus === "failed" && alignRoute.length === 0 ? (
+        <strong>선택하신 날짜로 검색되는 터미널이 없습니다. 오늘 날짜 기준 2일 이후까지 검색 가능합니다.</strong>
       ) : null}
     </>
   );

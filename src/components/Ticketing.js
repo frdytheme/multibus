@@ -5,10 +5,10 @@ import { fetchCityCode } from "../store/fetchCitySlice";
 import { confirmToggle, modalToggle } from "../store/ticketModalToggleSlice";
 import { changeArrDep, initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml, setTrml } from "../store/departTrmlSlice";
-import { nxtDepTime, path } from "../asset/DB/requestUrl";
+import { nowDay, nxtDay, nxtDepTime, path } from "../asset/DB/requestUrl";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { setGrade } from "../store/getGradeSlice";
-import { inputDepDate } from "../store/getDateSlice";
+import { inputDepDate, inputToday } from "../store/getDateSlice";
 
 const TicketingOption = styled.section`
   width: 750px;
@@ -38,8 +38,7 @@ const TicketingOption = styled.section`
       &:first-child {
         &::after {
           content: "";
-          background: url(${path}/images/ico_oneway.png) no-repeat center /
-            cover;
+          background: url(${path}/images/ico_oneway.png) no-repeat center / cover;
           display: block;
           width: 19px;
           height: 10px;
@@ -52,8 +51,7 @@ const TicketingOption = styled.section`
       &:nth-child(2) {
         &::after {
           content: "";
-          background: url(${path}/images/ico_roundtrip.png) no-repeat center /
-            cover;
+          background: url(${path}/images/ico_roundtrip.png) no-repeat center / cover;
           display: block;
           width: 19px;
           height: 19px;
@@ -68,20 +66,17 @@ const TicketingOption = styled.section`
         color: var(--blue-color);
         &:first-child {
           &::after {
-            background: url(${path}/images/ico_oneway_on.png) no-repeat center /
-              cover;
+            background: url(${path}/images/ico_oneway_on.png) no-repeat center / cover;
           }
         }
         &:nth-child(2) {
           &::after {
-            background: url(${path}/images/ico_roundtrip_on.png) no-repeat
-              center / cover;
+            background: url(${path}/images/ico_roundtrip_on.png) no-repeat center / cover;
           }
         }
         &::before {
           content: "";
-          background: url(${path}/images/ico_tab_s_on.png) no-repeat center /
-            cover;
+          background: url(${path}/images/ico_tab_s_on.png) no-repeat center / cover;
           display: block;
           width: 12px;
           height: 11px;
@@ -177,8 +172,7 @@ const TicketingOption = styled.section`
             height: 100%;
           }
           &:hover::after {
-            background: url(${path}/images/arrow_toggle_s.png) no-repeat center
-              bottom / cover;
+            background: url(${path}/images/arrow_toggle_s.png) no-repeat center bottom / cover;
           }
         }
       }
@@ -207,8 +201,7 @@ const TicketingOption = styled.section`
           &:nth-child(2) {
             color: #e9a410;
             width: 85px;
-            background: url(${path}/images/ico_grade1_s.png) no-repeat 65px
-              center;
+            background: url(${path}/images/ico_grade1_s.png) no-repeat 65px center;
             &.checked::after {
               content: url(${path}/images/ico_gradeY_s_on.png);
             }
@@ -221,8 +214,7 @@ const TicketingOption = styled.section`
             &:hover,
             &.checked {
               color: #d29400;
-              background: url(${path}/images/ico_grade1_s_on.png) no-repeat 65px
-                center;
+              background: url(${path}/images/ico_grade1_s_on.png) no-repeat 65px center;
               &::before {
                 content: url(${path}/images/ico_premium_s_on.png);
               }
@@ -230,23 +222,19 @@ const TicketingOption = styled.section`
           }
           &:nth-child(3) {
             width: 53px;
-            background: url(${path}/images/ico_grade2_s.png) no-repeat 35px
-              center;
+            background: url(${path}/images/ico_grade2_s.png) no-repeat 35px center;
             &:hover,
             &.checked {
-              background: url(${path}/images/ico_grade2_s_on.png) no-repeat 35px
-                center;
+              background: url(${path}/images/ico_grade2_s_on.png) no-repeat 35px center;
               color: #000;
             }
           }
           &:nth-child(4) {
             width: 53px;
-            background: url(${path}/images/ico_grade3_s.png) no-repeat 35px
-              center;
+            background: url(${path}/images/ico_grade3_s.png) no-repeat 35px center;
             &:hover,
             &.checked {
-              background: url(${path}/images/ico_grade3_s_on.png) no-repeat 35px
-                center;
+              background: url(${path}/images/ico_grade3_s_on.png) no-repeat 35px center;
               color: #000;
             }
           }
@@ -340,11 +328,11 @@ function Ticketing() {
   const arrTrml = useSelector((state) => state.arrTrml.data.terminalNm);
   const arrTrmlObj = useSelector((state) => state.arrTrml.data);
   const today = useSelector((state) => state.getDate.showToday);
-  const nxtDay = useSelector((state) => state.getDate.showNxtday);
   const [oneWay, setOneWay] = useState(false);
   const [check, setCheck] = useState(false);
   const [dateChk, setDateChk] = useState(false);
   const gradeRef = useRef(null);
+  const depDate = useSelector(state => state.getDate.depDate);
 
   // 버스 등급 체크 classList 라디오버튼 로직
   const handleGradeChk = () => {
@@ -361,9 +349,7 @@ function Ticketing() {
 
   // 조회하기 클릭 시 알림창
   const confirmAlert = () => {
-    alert(
-      "당일출발차량의 경우 예매 후 당일취소를 하셔도 취소위약금이 청구되오니 유의 바랍니다."
-    );
+    alert("당일출발차량의 경우 예매 후 당일취소를 하셔도 취소위약금이 청구되오니 유의 바랍니다.");
     dispatch(confirmToggle());
   };
 
@@ -372,6 +358,8 @@ function Ticketing() {
     dispatch(initTrml());
     dispatch(initArrTrml());
   };
+
+  console.log(depDate)
 
   // 출도착지 반전 함수.
   const changePlace = () => {
@@ -407,9 +395,7 @@ function Ticketing() {
                 dispatch(initTrml());
               }}>
               출발지
-              <span style={depTrml && { color: "#000" }}>
-                {depTrml ? depTrml : "선택"}
-              </span>
+              <span style={depTrml && { color: "#000" }}>{depTrml ? depTrml : "선택"}</span>
             </p>
             <div
               className="toggleIcon"
@@ -421,9 +407,7 @@ function Ticketing() {
                 dispatch(modalToggle());
               }}>
               도착지
-              <span style={depTrml && { color: "#000" }}>
-                {arrTrml ? arrTrml : "선택"}
-              </span>
+              <span style={depTrml && { color: "#000" }}>{arrTrml ? arrTrml : "선택"}</span>
             </p>
           </li>
           <li className="dateBox">
@@ -434,14 +418,16 @@ function Ticketing() {
             <div className="dateChoice">
               <span
                 className={`${dateChk || "checked"}`}
-                onClick={() => setDateChk(false)}>
+                onClick={() => {
+                  setDateChk(false);
+                  dispatch(inputToday(nowDay))
+                }}>
                 오늘
               </span>
               <span
                 className={`${dateChk && "checked"}`}
                 onClick={() => {
                   setDateChk(true);
-                  dispatch(inputDepDate(nxtDepTime));
                 }}>
                 내일
               </span>

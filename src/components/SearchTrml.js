@@ -69,6 +69,7 @@ function SearchTrml() {
   const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
   const arrTrmlList = useSelector((state) => state.expRoute.data);
   const depDate = useSelector((state) => state.getDate.depDate);
+  // const fetchStatus = useSelector((state) => state.expRoute.status);
 
   // 중복된 터미널 제거, 이름 순 정렬.
   const currentRoute = arrTrmlList.filter((trml, idx, route) => {

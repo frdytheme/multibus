@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { currentHour, path, today } from "../asset/DB/requestUrl";
+import { currentHour, nowDay, path, today } from "../asset/DB/requestUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { fetchRoute } from "../store/fetchRouteSlice";
-import { initAllDate } from "../store/getDateSlice";
+import { inputDepDate, inputToday } from "../store/getDateSlice";
 import { initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml } from "../store/departTrmlSlice";
 import { setGrade } from "../store/getGradeSlice";
@@ -269,13 +269,11 @@ const RouteInformation = styled.div`
               &:first-child::before,
               &:nth-child(2)::before,
               &:nth-child(3)::before {
-                background: url(${path}/images/ico_night.png) no-repeat 50% /
-                  cover;
+                background: url(${path}/images/ico_night.png) no-repeat 50% / cover;
               }
               &::before {
                 content: "";
-                background: url(${path}/images/ico_daytime.png) no-repeat 50% /
-                  cover;
+                background: url(${path}/images/ico_daytime.png) no-repeat 50% / cover;
                 display: block;
                 width: 16px;
                 height: 16px;
@@ -415,10 +413,7 @@ function RouteInfo() {
 
   // 전체 도착지 리스트에서 선택한 도착지,버스 등급으로 필터링
   const filterTrml = routeRes.filter((route) => {
-    return (
-      route.arrPlaceNm === arrTrml.data.terminalNm &&
-      route.gradeNm.includes(busGrade)
-    );
+    return route.arrPlaceNm === arrTrml.data.terminalNm && route.gradeNm.includes(busGrade);
   });
 
   // 출발 시간이 밤 12시 이후면 리스트 끝으로 이동.
@@ -439,7 +434,10 @@ function RouteInfo() {
     const depMin = alignTrml[0].depPlandTime.toString().slice(10, 12);
     const arrHour = alignTrml[0].arrPlandTime.toString().slice(8, 10);
     const arrMin = alignTrml[0].arrPlandTime.toString().slice(10, 12);
-    const hour = arrHour === "00" ? arrHour + 12 - depHour : arrHour - depHour;
+    const hour =
+      arrHour === "00" || arrHour === "01" || arrHour === "02" || arrHour === "03"
+        ? arrHour * 1 + 24 - depHour
+        : arrHour - depHour;
     const min = arrMin - depMin;
     roadDistance = `약 ${90 * hour}km`;
     return `${hour}시간 ${min}분 소요`;
@@ -465,13 +463,13 @@ function RouteInfo() {
 
   const timeTable = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
 
+  console.log(alignTrml);
+  console.log(routeRes);
+
   // datePick 변경 시 터미널 리스트 재출력
   useEffect(() => {
-    arrId &&
-      dispatch(
-        fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 })
-      );
-  }, [depDate]);
+    dispatch(fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 }));
+  }, [depDate, busGrade]);
 
   return (
     <RouteInformation>
@@ -491,9 +489,7 @@ function RouteInfo() {
       </div>
       <ul className="sideMenu">
         <li>HOME</li>
-        <li
-          className={`${sideShow && "show"}`}
-          onClick={() => handleSideMenu()}>
+        <li className={`${sideShow && "show"}`} onClick={() => handleSideMenu()}>
           고속버스예매
           {sideShow ? (
             <img src={`${path}/images/bu_selectArrowC.png`} alt="아래 화살표" />
@@ -526,9 +522,10 @@ function RouteInfo() {
               <Link
                 to="/"
                 onClick={() => {
-                  dispatch(initAllDate());
                   dispatch(initArrTrml());
                   dispatch(initTrml());
+                  dispatch(inputDepDate(today));
+                  dispatch(inputToday(nowDay));
                 }}>
                 수정
               </Link>
@@ -551,10 +548,7 @@ function RouteInfo() {
             <div className="handler">
               <div className="datePicker">
                 <div className="refreshBtn">
-                  <img
-                    src={`${path}/images/ico_refresh_s.png`}
-                    alt="새로고침 아이콘"
-                  />
+                  <img src={`${path}/images/ico_refresh_s.png`} alt="새로고침 아이콘" />
                 </div>
                 <p>{showToday}</p>
                 <div className="picker">
@@ -566,9 +560,7 @@ function RouteInfo() {
               <ul className="timeTable">
                 {timeTable.map((time) => {
                   return (
-                    <li
-                      key={time}
-                      className={time < currentHour ? "disabled" : undefined}>
+                    <li key={time} className={time < currentHour ? "disabled" : undefined}>
                       {time}
                     </li>
                   );
@@ -591,25 +583,12 @@ function RouteInfo() {
                         return (
                           <ul
                             key={idx}
-                            className={
-                              depPlandTime < currentTime &&
-                              depDate === currentToday
-                                ? `disabled`
-                                : "show"
-                            }>
+                            className={depPlandTime < currentTime && depDate === currentToday ? `disabled` : "show"}>
                             <li>{changeTime(depPlandTime)}</li>
                             <li>
-                              <img
-                                src={`${path}/images/bus_company${ranNum}.png`}
-                                alt="고속사"
-                              />
+                              <img src={`${path}/images/bus_company${ranNum}.png`} alt="고속사" />
                             </li>
-                            <li
-                              className={`${
-                                gradeNm.includes("프리미엄") && "premium"
-                              }`}>
-                              {gradeNm}
-                            </li>
+                            <li className={`${gradeNm.includes("프리미엄") && "premium"}`}>{gradeNm}</li>
                             <li></li>
                             <li>36석</li>
                             <li className="submitRoute">선택</li>

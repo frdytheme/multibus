@@ -38,9 +38,6 @@ export const getDateSlice = createSlice({
     inputNewDate: (state, action) => {
       state.newDate = action.payload;
     },
-    initAllDate: (state) => {
-      state = initialState;
-    },
   },
 });
 
@@ -51,6 +48,5 @@ export const {
   inputNxtday,
   inputCurrentTime,
   inputNewDate,
-  initAllDate,
 } = getDateSlice.actions;
 export default getDateSlice.reducer;
