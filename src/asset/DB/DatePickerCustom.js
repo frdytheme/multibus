@@ -4,7 +4,7 @@ import ko from "date-fns/locale/ko";
 import { forwardRef, useState } from "react";
 import "../style/datePickerCustom.css";
 import { path } from "./requestUrl";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   inputCurrentTime,
   inputDepDate,
@@ -16,7 +16,6 @@ import {
 
 const DatePickerCustom = () => {
   const dispatch = useDispatch();
-  const depDate = useSelector((state) => state.getDate);
 
   const [startDate, setStartDate] = useState(new Date());
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -71,7 +70,7 @@ const DatePickerCustom = () => {
       ". " +
       (day * 1 + 1) +
       ". " +
-      week[getWeek != 6 ? getWeek + 1 : 0];
+      week[getWeek !== 6 ? getWeek + 1 : 0];
 
     dispatch(inputToday(nowDay));
     dispatch(inputNxtday(nxtDay));

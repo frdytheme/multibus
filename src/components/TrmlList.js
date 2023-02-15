@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { path } from "../asset/DB/requestUrl";
 import { setTrmlNum } from "../store/setTrmlByNumSlice";
 import ArrTrmlList from "./ArrTrmlList";
 import DepTrmlList from "./DepTrmlList";
@@ -55,16 +56,16 @@ const TrmlBoard = styled.li`
   }
   .loading {
     position: absolute;
-    width: 500px;
+    width: 200px;
     padding: 20px 0;
     font-size: 18px;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #dddddd65;
     color: #fff;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 7px;
+    border-radius: 5px;
   }
 `;
 
@@ -128,7 +129,7 @@ function TrmlList() {
       {(depTrml && fetchStatus === "ready") && (
         <div className="loading">
           {fetchStatus === "ready"
-            ? "예매가 가능한 터미널 검색 중..."
+            ? <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
             : fetchStatus === "failed"
             ? "터미널 검색에 실패했습니다."
             : null}

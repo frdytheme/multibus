@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCityCode } from "../store/fetchCitySlice";
 import { confirmToggle, modalToggle } from "../store/ticketModalToggleSlice";
-import { changeArrDep, initArrTrml, setArrTrml } from "../store/arrTrmlSlice";
+import { changeArrDep, initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml, setTrml } from "../store/departTrmlSlice";
 import { nxtDepTime, path } from "../asset/DB/requestUrl";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
@@ -345,7 +345,6 @@ function Ticketing() {
   const [check, setCheck] = useState(false);
   const [dateChk, setDateChk] = useState(false);
   const gradeRef = useRef(null);
-  const busGrade = useSelector((state) => state.getGrade);
 
   // 버스 등급 체크 classList 라디오버튼 로직
   const handleGradeChk = () => {
@@ -469,7 +468,6 @@ function Ticketing() {
                 onClick={() => {
                   setDateChk(true);
                   dispatch(inputDepDate(nxtDepTime));
-                  console.log(nxtDepTime);
                 }}>
                 내일
               </span>
@@ -489,21 +487,18 @@ function Ticketing() {
               <li
                 onClick={() => {
                   dispatch(setGrade(7));
-                  console.log(busGrade);
                 }}>
                 프리미엄
               </li>
               <li
                 onClick={() => {
                   dispatch(setGrade(1));
-                  console.log(busGrade);
                 }}>
                 우등
               </li>
               <li
                 onClick={() => {
                   dispatch(setGrade(5));
-                  console.log(busGrade);
                 }}>
                 일반
               </li>

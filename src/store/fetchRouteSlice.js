@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { busAPI, depTime, nowTime, today } from "../asset/DB/requestUrl";
+import { busAPI, depTime, nowTime } from "../asset/DB/requestUrl";
 
 export const fetchRoute = createAsyncThunk("expRoute/fetchExpRoute", async ({ dep, arr, date, list, grade }) => {
   const res = await axios.get(busAPI.getRoute(dep, arr, date, list, grade));

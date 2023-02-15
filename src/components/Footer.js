@@ -151,9 +151,9 @@ function Footer() {
           }}>
           관련사이트
           {otherChk ? (
-            <img src={`${path}/images/bu_selectArrow.png`} alt="" />
+            <img src={`${path}/images/bu_selectArrow.png`} alt="화살표 아이콘" />
           ) : (
-            <img src={`${path}/images/bu_selectArrowC.png`} alt="" />
+            <img src={`${path}/images/bu_selectArrowC.png`} alt="화살표 아이콘" />
           )}
           {otherChk && (
             <ul>
@@ -167,8 +167,8 @@ function Footer() {
           )}
         </div>
         <div className="kobusIcon">
-          <img src={`${path}/images/foot_com1.png`} alt="" />
-          <img src={`${path}/images/foot_com2.png`} alt="" />
+          <img src={`${path}/images/foot_com1.png`} alt="운송사업조합 로고" />
+          <img src={`${path}/images/foot_com2.png`} alt="터미널사업조합 로고" />
         </div>
       </div>
     </FooterBox>

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { allGradeList } from "../asset/DB/allDepTrmlList";
 
 const getGrade = createSlice({
   name: "setGrade",
@@ -16,6 +15,8 @@ const getGrade = createSlice({
         state.data = "일반";
       } else if (state.id === 7) {
         state.data = "프리미엄";
+      } else {
+        state.data = "";
       }
     },
   },

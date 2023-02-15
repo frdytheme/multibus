@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { path } from "../asset/DB/requestUrl";
+import { nowDay, path } from "../asset/DB/requestUrl";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { initTrml } from "../store/departTrmlSlice";
 import { initArrTrml } from "../store/arrTrmlSlice";
-import { initAllDate } from "../store/getDateSlice";
+import { initAllDate, inputToday } from "../store/getDateSlice";
+import { setGrade } from "../store/getGradeSlice";
 
 const Nav = styled.nav`
   width: 220px;
@@ -101,7 +102,8 @@ function Navigation() {
           onClick={() => {
             dispatch(initTrml());
             dispatch(initArrTrml());
-            dispatch(initAllDate());
+            dispatch(inputToday(nowDay));
+            dispatch(setGrade(0));
           }}>
           <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
           고속버스통합예매

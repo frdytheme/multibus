@@ -85,7 +85,7 @@ function Banner(props) {
         <p>
           도로 위 비즈니스 클래스 프리미엄 고속버스
           <span>
-            <img src={`${path}/images/mainBnrImg.png`} alt="" />
+            <img src={`${path}/images/mainBnrImg.png`} alt="버스 사진" />
           </span>
         </p>
       </li>
@@ -94,7 +94,7 @@ function Banner(props) {
         <p>
           고속버스 당일배송 온라인 택배신청
           <span>
-            <img src={`${path}/images/mainBnrImg2.png`} alt="" />
+            <img src={`${path}/images/mainBnrImg2.png`} alt="제로데이 이미지" />
           </span>
         </p>
       </li>
@@ -103,7 +103,7 @@ function Banner(props) {
         <p>
           고속/시외버스 앱 결제시 30% 할인
           <span>
-            <img src={`${path}/images/mainBnrImg1.png`} alt="" />
+            <img src={`${path}/images/mainBnrImg1.png`} alt="신한카드 이미지" />
           </span>
         </p>
       </li>
@@ -112,15 +112,15 @@ function Banner(props) {
         <ul className="infomation">
           <li>
             {" "}
-            <img src={`${path}/images/ico_info1.png`} alt="" /> 예매안내
+            <img src={`${path}/images/ico_info1.png`} alt="인포 아이콘" /> 예매안내
           </li>
           <li>
             {" "}
-            <img src={`${path}/images/ico_info2.png`} alt="" /> 환승안내
+            <img src={`${path}/images/ico_info2.png`} alt="인포 아이콘" /> 환승안내
           </li>
           <li>
             {" "}
-            <img src={`${path}/images/ico_info4.png`} alt="" /> 터미널안내
+            <img src={`${path}/images/ico_info4.png`} alt="인포 아이콘" /> 터미널안내
           </li>
         </ul>
       </li>

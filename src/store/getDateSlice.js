@@ -39,7 +39,7 @@ export const getDateSlice = createSlice({
       state.newDate = action.payload;
     },
     initAllDate: (state) => {
-      state = { ...initialState };
+      state = initialState;
     },
   },
 });

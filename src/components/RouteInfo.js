@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { currentHour, path, today } from "../asset/DB/requestUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { fetchRoute } from "../store/fetchRouteSlice";
-import { initAllDate, inputDepDate } from "../store/getDateSlice";
+import { initAllDate } from "../store/getDateSlice";
 import { initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml } from "../store/departTrmlSlice";
+import { setGrade } from "../store/getGradeSlice";
 
 const RouteInformation = styled.div`
   width: 100%;
@@ -323,34 +324,37 @@ const RouteInformation = styled.div`
                 &.disabled {
                   opacity: 0.4;
                   cursor: default;
-                }
-                li {
-                  font-size: 18px;
-                  height: 54px;
-                  line-height: 54px;
-                  &:nth-child(2) {
-                    display: flex;
-                    align-items: center;
-                  }
-                  &:nth-child(3),
-                  &:nth-child(5) {
-                    font-size: 14px;
-                  }
-                  &:nth-child(4) {
-                    font-size: 12px;
+                  img {
+                    filter: grayscale();
                   }
                 }
-                .submitRoute {
-                  position: absolute;
-                  right: 75px;
-                  top: 50%;
-                  transform: translateY(-50%);
-                  font-size: 13px;
-                  color: var(--blue-color);
-                  &::after {
-                    content: url(${path}/images/btn_arrow.png);
-                    margin-left: 5px;
-                  }
+              }
+              li {
+                font-size: 18px;
+                height: 54px;
+                line-height: 54px;
+                &:nth-child(2) {
+                  display: flex;
+                  align-items: center;
+                }
+                &:nth-child(3),
+                &:nth-child(5) {
+                  font-size: 14px;
+                }
+                &:nth-child(4) {
+                  font-size: 12px;
+                }
+              }
+              .submitRoute {
+                position: absolute;
+                right: 75px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 13px;
+                color: var(--blue-color);
+                &::after {
+                  content: url(${path}/images/btn_arrow.png);
+                  margin-left: 5px;
                 }
               }
             }
@@ -360,6 +364,7 @@ const RouteInformation = styled.div`
                 font-weight: bold;
                 display: block;
                 text-align: center;
+                color: #999;
                 span {
                   display: block;
                   font-size: 13px;
@@ -367,6 +372,18 @@ const RouteInformation = styled.div`
                   color: crimson;
                   line-height: 2;
                   margin-top: 20px;
+                }
+                div {
+                  background-color: var(--blue-color);
+                  color: #fff;
+                  width: 200px;
+                  padding: 5px 20px;
+                  margin: 30px auto;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  &:hover {
+                    opacity: 0.7;
+                  }
                 }
               }
             }
@@ -414,8 +431,22 @@ function RouteInfo() {
     }),
   ];
 
+  // 소요 시간 / 이동 거리 계산
+  let roadDistance = 0;
+  const getRoadTime = () => {
+    if (alignTrml.length === 0) return;
+    const depHour = alignTrml[0].depPlandTime.toString().slice(8, 10);
+    const depMin = alignTrml[0].depPlandTime.toString().slice(10, 12);
+    const arrHour = alignTrml[0].arrPlandTime.toString().slice(8, 10);
+    const arrMin = alignTrml[0].arrPlandTime.toString().slice(10, 12);
+    const hour = arrHour === "00" ? arrHour + 12 - depHour : arrHour - depHour;
+    const min = arrMin - depMin;
+    roadDistance = `약 ${90 * hour}km`;
+    return `${hour}시간 ${min}분 소요`;
+  };
+
   // 총 리스트에서 좌석 등급만 중복 제거 후 return
-  const gradeList = routeRes.filter((trml, idx, route) => {
+  const gradeList = alignTrml.filter((trml, idx, route) => {
     return route.findIndex((item) => item.gradeNm === trml.gradeNm) === idx;
   });
 
@@ -429,7 +460,7 @@ function RouteInfo() {
 
   // 가격 표기 변경 (ex 11000 -> 11,000 원)
   const changeCharge = (charge) => {
-    return charge.toLocaleString() + " " + "원";
+    return charge.toLocaleString() + " 원";
   };
 
   const timeTable = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
@@ -449,11 +480,11 @@ function RouteInfo() {
         <ul className="statusStep">
           <li className="on">예매정보입력</li>
           <li className="spreadArrow on">
-            <img src={`${path}/images/arrow_process.png`} alt="" />
+            <img src={`${path}/images/arrow_process.png`} alt="화살표 아이콘" />
           </li>
           <li>결제정보입력</li>
           <li className="spreadArrow">
-            <img src={`${path}/images/arrow_process.png`} alt="" />
+            <img src={`${path}/images/arrow_process.png`} alt="화살표 아이콘" />
           </li>
           <li>예매완료</li>
         </ul>
@@ -490,8 +521,8 @@ function RouteInfo() {
             <div className="depArrInfo">
               <p>{depTrml.name}</p>
               <p>{arrTrml.name}</p>
-              <em>소요 시간</em>
-              <em>이동 거리</em>
+              <em>{routeStatus === "failed" || getRoadTime()}</em>
+              <em>{roadDistance}</em>
               <Link
                 to="/"
                 onClick={() => {
@@ -519,12 +550,7 @@ function RouteInfo() {
           <div className="routeChoice">
             <div className="handler">
               <div className="datePicker">
-                <div
-                  className="refreshBtn"
-                  onClick={() => {
-                    dispatch();
-                    console.log(today);
-                  }}>
+                <div className="refreshBtn">
                   <img
                     src={`${path}/images/ico_refresh_s.png`}
                     alt="새로고침 아이콘"
@@ -558,9 +584,10 @@ function RouteInfo() {
                 </ul>
                 <ul className="routeItem">
                   <li>
-                    {routeStatus !== "failed" ? (
+                    {routeStatus !== "failed" && alignTrml.length !== 0 ? (
                       alignTrml.map((route, idx) => {
                         const { depPlandTime, gradeNm } = route;
+                        const ranNum = Math.trunc(Math.random() * 7 + 1);
                         return (
                           <ul
                             key={idx}
@@ -568,12 +595,12 @@ function RouteInfo() {
                               depPlandTime < currentTime &&
                               depDate === currentToday
                                 ? `disabled`
-                                : undefined
+                                : "show"
                             }>
                             <li>{changeTime(depPlandTime)}</li>
                             <li>
                               <img
-                                src={`${path}/images/bus_dyexpress_s_on.png`}
+                                src={`${path}/images/bus_company${ranNum}.png`}
                                 alt="고속사"
                               />
                             </li>
@@ -589,6 +616,19 @@ function RouteInfo() {
                           </ul>
                         );
                       })
+                    ) : alignTrml.length === 0 ? (
+                      <ul className="fetchFailed">
+                        <li>
+                          해당 좌석의 도착 정보를 찾을 수 없습니다.
+                          <span>좌석을 전체로 변경 후 다시 검색해주세요.</span>
+                          <div
+                            onClick={() => {
+                              dispatch(setGrade(0));
+                            }}>
+                            변경하시겠습니까?
+                          </div>
+                        </li>
+                      </ul>
                     ) : (
                       <ul className="fetchFailed">
                         <li>
