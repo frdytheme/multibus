@@ -1,25 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { busAPI, depTime, today } from "../asset/DB/requestUrl";
+import { busAPI, depTime, nowTime, today } from "../asset/DB/requestUrl";
 
-export const fetchRoute = createAsyncThunk(
-  "expRoute/fetchExpRoute",
-  async ({ dep, arr, date, list, grade }) => {
-    const res = await axios.get(busAPI.getRoute(dep, arr, date, list, grade));
-    const result = res.data.response.body.items.item;
+export const fetchRoute = createAsyncThunk("expRoute/fetchExpRoute", async ({ dep, arr, date, list, grade }) => {
+  const res = await axios.get(busAPI.getRoute(dep, arr, date, list, grade));
+  const result = res.data.response.body.items.item;
 
-    // 날짜가 오늘이면 현재 시간 이후로 운행하는 경로만 필터링.
-    // 날짜가 오늘 이후면 모든 시간 경로 return.
-    if (date !== today) {
-      return result;
-    } else {
-      const currentRes = result.filter((route) => {
-        return route.depPlandTime > depTime;
-      });
-      return currentRes;
-    }
+  // 날짜가 오늘이면 현재 시간 이후로 운행하는 경로만 필터링.
+  // 날짜가 오늘 이후면 모든 시간 경로 return.
+  if (nowTime >= 2300) {
+    console.log("밤 11시 이후니까 내일 것 까지 ");
+    return result;
+  } else {
+    console.log("현재 시간 이후 예매 가능한 목록 검색 중...");
+    const currentRes = result.filter((route) => {
+      return route.depPlandTime > depTime;
+    });
+    return currentRes;
   }
-);
+});
 
 export const getExpRoute = createSlice({
   name: "expRoute",

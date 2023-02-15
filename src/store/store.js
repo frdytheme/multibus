@@ -4,6 +4,7 @@ import departTrml from "./departTrmlSlice";
 import CityCodeReducer from "./fetchCitySlice";
 import fetchRouteSlice from "./fetchRouteSlice";
 import trmlListReducer from "./fetchTrmlSlice";
+import filterTrmlList from "./filterTrmlList";
 import getDateSlice from "./getDateSlice";
 import getGradeSlice from "./getGradeSlice";
 import setTrmlByNumSlice from "./setTrmlByNumSlice";
@@ -22,6 +23,7 @@ export const store = configureStore({
     expRoute: fetchRouteSlice,
     getDate: getDateSlice,
     getGrade: getGradeSlice,
+    filterTrml: filterTrmlList,
   },
 });
 

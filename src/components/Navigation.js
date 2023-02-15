@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { path } from "../asset/DB/requestUrl";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { initTrml } from "../store/departTrmlSlice";
+import { initArrTrml } from "../store/arrTrmlSlice";
+import { initAllDate } from "../store/getDateSlice";
 
 const Nav = styled.nav`
   width: 220px;
@@ -87,10 +91,18 @@ const Nav = styled.nav`
 `;
 
 function Navigation() {
+  const dispatch = useDispatch();
+
   return (
     <Nav>
       <h1>
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() => {
+            dispatch(initTrml());
+            dispatch(initArrTrml());
+            dispatch(initAllDate());
+          }}>
           <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
           고속버스통합예매
         </Link>

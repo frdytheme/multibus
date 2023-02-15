@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { path } from "../asset/DB/requestUrl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
+import { fetchRoute } from "../store/fetchRouteSlice";
 
 const RouteInformation = styled.div`
   width: 100%;
@@ -264,13 +265,11 @@ const RouteInformation = styled.div`
               &:first-child::before,
               &:nth-child(2)::before,
               &:nth-child(3)::before {
-                background: url(${path}/images/ico_night.png) no-repeat 50% /
-                  cover;
+                background: url(${path}/images/ico_night.png) no-repeat 50% / cover;
               }
               &::before {
                 content: "";
-                background: url(${path}/images/ico_daytime.png) no-repeat 50% /
-                  cover;
+                background: url(${path}/images/ico_daytime.png) no-repeat 50% / cover;
                 display: block;
                 width: 16px;
                 height: 16px;
@@ -340,6 +339,22 @@ const RouteInformation = styled.div`
                 }
               }
             }
+            li {
+              .fetchFailed {
+                font-size: 20px;
+                font-weight: bold;
+                display: block;
+                text-align: center;
+                span {
+                  display: block;
+                  font-size: 13px;
+                  font-weight: normal;
+                  color: crimson;
+                  line-height: 2;
+                  margin-top: 20px;
+                }
+              }
+            }
           }
         }
       }
@@ -348,28 +363,29 @@ const RouteInformation = styled.div`
 `;
 
 function RouteInfo() {
+  const dispatch = useDispatch();
   const [sideShow, setSideShow] = useState(false);
   const showDate = useSelector((state) => state.getDate.showToday);
   const depTrml = useSelector((state) => state.depTrml);
-  const arrTrml = useSelector((state) => state.arrTrml.data);
+  const arrTrml = useSelector((state) => state.arrTrml);
   const routeRes = useSelector((state) => state.expRoute.data);
+  const routeStatus = useSelector((state) => state.expRoute.status);
   const busGrade = useSelector((state) => state.getGrade.data);
-  const depTime = useSelector((state) => state.getDate);
+  const depDate = useSelector((state) => state.getDate.depDate);
+  const arrId = useSelector((state) => state.arrTrml.data.terminalId);
+  const depId = useSelector((state) => state.depTrml.data.terminalId);
 
   const handleSideMenu = () => {
     setSideShow(!sideShow);
   };
 
   // 전체 도착지 리스트에서 선택한 도착지,버스 등급으로 필터링
-  const arrByRoute = routeRes.filter((route) => {
-    return route.arrPlaceNm === arrTrml.terminalNm;
-  });
-  const currentRoute = arrByRoute.filter((route) => {
-    return route.gradeNm.includes(busGrade);
+  const filterTrml = routeRes.filter((route) => {
+    return route.arrPlaceNm === arrTrml.data.terminalNm && route.gradeNm.includes(busGrade);
   });
 
-  // 총 리스트에서 좌석 등급만 중복 제거
-  const gradeList = currentRoute.filter((trml, idx, route) => {
+  // 총 리스트에서 좌석 등급만 중복 제거 후 return
+  const gradeList = routeRes.filter((trml, idx, route) => {
     return route.findIndex((item) => item.gradeNm === trml.gradeNm) === idx;
   });
 
@@ -387,7 +403,9 @@ function RouteInfo() {
   };
 
   // 현재 시간 기준 이전 목록 비활성화용 state 관리 함수
-  const handleDisable = () => {};
+  useEffect(() => {
+    dispatch(fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 }));
+  }, [depDate]);
 
   return (
     <RouteInformation>
@@ -407,9 +425,7 @@ function RouteInfo() {
       </div>
       <ul className="sideMenu">
         <li>HOME</li>
-        <li
-          className={`${sideShow && "show"}`}
-          onClick={() => handleSideMenu()}>
+        <li className={`${sideShow && "show"}`} onClick={() => handleSideMenu()}>
           고속버스예매
           {sideShow ? (
             <img src={`${path}/images/bu_selectArrowC.png`} alt="아래 화살표" />
@@ -445,9 +461,9 @@ function RouteInfo() {
               <li>
                 요금정보 <span>(일반요금)</span>
               </li>
-              {gradeList.map((grade) => {
+              {gradeList.map((grade, idx) => {
                 return (
-                  <li key={grade.arrPlandTime}>
+                  <li key={idx}>
                     {grade.gradeNm}
                     <strong>{changeCharge(grade.charge)}</strong>
                   </li>
@@ -459,10 +475,7 @@ function RouteInfo() {
             <div className="handler">
               <div className="datePicker">
                 <div className="refreshBtn">
-                  <img
-                    src={`${path}/images/ico_refresh_s.png`}
-                    alt="새로고침 아이콘"
-                  />
+                  <img src={`${path}/images/ico_refresh_s.png`} alt="새로고침 아이콘" />
                 </div>
                 <p>{showDate}</p>
                 <div className="picker">
@@ -495,37 +508,33 @@ function RouteInfo() {
                 </ul>
                 <ul className="routeItem">
                   <li>
-                    {currentRoute.map((route) => {
-                      const {
-                        arrPlaceNm,
-                        arrPlandTime,
-                        charge,
-                        depPlaceNm,
-                        depPlandTime,
-                        gradeNm,
-                        routeId,
-                      } = route;
-                      return (
-                        <ul key={arrPlandTime}>
-                          <li>{changeTime(depPlandTime)}</li>
-                          <li>
-                            <img
-                              src={`${path}/images/bus_dyexpress_s_on.png`}
-                              alt="고속사"
-                            />
-                          </li>
-                          <li
-                            className={`${
-                              gradeNm.includes("프리미엄") && "premium"
-                            }`}>
-                            {gradeNm}
-                          </li>
-                          <li></li>
-                          <li>36석</li>
-                          <li className="submitRoute">선택</li>
-                        </ul>
-                      );
-                    })}
+                    {routeStatus !== "failed" ? (
+                      filterTrml.map((route, idx) => {
+                        const { arrPlaceNm, arrPlandTime, charge, depPlaceNm, depPlandTime, gradeNm, routeId } = route;
+                        return (
+                          <ul key={idx}>
+                            <li>{changeTime(depPlandTime)}</li>
+                            <li>
+                              <img src={`${path}/images/bus_dyexpress_s_on.png`} alt="고속사" />
+                            </li>
+                            <li className={`${gradeNm.includes("프리미엄") && "premium"}`}>{gradeNm}</li>
+                            <li></li>
+                            <li>36석</li>
+                            <li className="submitRoute">선택</li>
+                          </ul>
+                        );
+                      })
+                    ) : (
+                      <ul className="fetchFailed">
+                        <li>
+                          도착 정보를 찾을 수 없습니다.
+                          <span>
+                            오늘 날짜부터 2일까지 검색 가능합니다.
+                            <br /> 다시 검색해주세요.
+                          </span>
+                        </li>
+                      </ul>
+                    )}
                   </li>
                 </ul>
               </div>

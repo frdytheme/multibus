@@ -117,21 +117,6 @@ const ConfirmAlert = styled.div`
 function ConfirmModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const depId = useSelector((state) => state.depTrml.data.terminalId);
-  const arrId = useSelector((state) => state.arrTrml.data.terminalId);
-  const depDate = useSelector((state) => state.getDate.depDate);
-
-
-  // const getRouteByGrade = () => {
-  //   dispatch(
-  //     fetchRoute({
-  //       dep: depId,
-  //       arr: arrId,
-  //       date: depDate,
-  //       list: 50,
-  //     })
-  //   );
-  // };
 
   return (
     <ConfirmAlert>
@@ -180,32 +165,18 @@ function ConfirmModal() {
         <div className="subTxt">
           <ul>
             <li>
-              당일출발 차량의 경우 출발시간 1시간 전까지 홈페이지 예매가
-              가능하며 1시간 미만 출발임박 차량의 예매를 원하시면 [
-              <strong>고속버스 모바일앱</strong>]에서 예매하시기 바랍니다.
+              당일출발 차량의 경우 출발시간 1시간 전까지 홈페이지 예매가 가능하며 1시간 미만 출발임박 차량의 예매를
+              원하시면 [<strong>고속버스 모바일앱</strong>]에서 예매하시기 바랍니다.
             </li>
+            <li>1회 최대 예매 매수는 6매입니다.(일부 시외우등 노선에 한정하여 10매까지 예매가능)</li>
             <li>
-              1회 최대 예매 매수는 6매입니다.(일부 시외우등 노선에 한정하여
-              10매까지 예매가능)
+              일반고속 청소년(중, 고등학생) 할인은 터미널 현장에서 학생증 및 청소년증을 제시 해야만 할인이 적용되며 탑승
+              시 소지가 꼭 필요합니다.
             </li>
-            <li>
-              일반고속 청소년(중, 고등학생) 할인은 터미널 현장에서 학생증 및
-              청소년증을 제시 해야만 할인이 적용되며 탑승 시 소지가 꼭
-              필요합니다.
-            </li>
-            <li>
-              할인 승차권 부정 사용 시 운임의 10배 부가운임을 요구할 수
-              있습니다.
-            </li>
-            <li>
-              사용하지 않은 모든 승차권은 지정차 출발 후 도착예정시간이 지나면
-              환불하실 수 없습니다.
-            </li>
+            <li>할인 승차권 부정 사용 시 운임의 10배 부가운임을 요구할 수 있습니다.</li>
+            <li>사용하지 않은 모든 승차권은 지정차 출발 후 도착예정시간이 지나면 환불하실 수 없습니다.</li>
             <li>취소수수료 산정은 날짜를 기준(시간 기준이 아님)으로 합니다.</li>
-            <li>
-              홈페이지 예매 후 창구에서 발권 시 예매에 사용한 신용카드를 반드시
-              지참하셔야 합니다.
-            </li>
+            <li>홈페이지 예매 후 창구에서 발권 시 예매에 사용한 신용카드를 반드시 지참하셔야 합니다.</li>
           </ul>
         </div>
         <div className="btnBox">
@@ -219,14 +190,6 @@ function ConfirmModal() {
             onClick={() => {
               dispatch(modalClose());
               navigate(`/routeInfo`);
-              // dispatch(
-              //   fetchRoute({
-              //     dep: depId,
-              //     arr: arrId,
-              //     date: depDate,
-              //     list: 50,
-              //   })
-              // );
             }}>
             동의
           </div>

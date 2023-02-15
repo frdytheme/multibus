@@ -14,7 +14,7 @@ export const arrivalTrml = createSlice({
     setArrTrml: (state, action) => {
       const arrInfo = action.payload;
 
-      // 경로 호출 API로 받아온 객체 배열 내 동일한 터미널을 Id가 있는 객체 배열 데이터로 변경
+      // 경로 호출 API로 받아온 객체 배열 내 동일한 터미널을 Id가 있는 객체 배열 데이터로 찾아서 return
       const findArrTrml = allDepTrmlList.find(
         (item) => item.terminalNm === arrInfo.arrPlaceNm
       );
