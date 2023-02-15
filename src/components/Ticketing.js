@@ -33,7 +33,7 @@ const TicketingOption = styled.section`
       width: 50%;
       background-color: #eee;
       position: relative;
-      cursor: pointer;
+      user-select: none;
       color: #b3b3b3;
       &:first-child {
         &::after {
@@ -389,40 +389,14 @@ function Ticketing() {
     <>
       <TicketingOption>
         <div>
-          <p
-            className={`${oneWay || "on"}`}
-            onClick={() => {
-              setOneWay(false);
-              depTrml || initPlace();
-            }}>
+          <p className="on">
             편도
             <span className="directWay">
-              <span
-                className={`${check || "checked"}`}
-                onClick={() => {
-                  setCheck(false);
-                  depTrml || initPlace();
-                }}>
-                직통
-              </span>
-              <span
-                className={`${check && "checked"}`}
-                onClick={() => {
-                  setCheck(true);
-                  initPlace();
-                }}>
-                환승
-              </span>
+              <span className="checked">직통</span>
+              <span>환승</span>
             </span>
           </p>
-          <p
-            className={`${oneWay && "on"}`}
-            onClick={() => {
-              setOneWay(true);
-              initPlace();
-            }}>
-            왕복
-          </p>
+          <p>왕복</p>
         </div>
         <ul className="ticketBox">
           <li className="choicePlace">

@@ -38,10 +38,7 @@ const Nav = styled.nav`
       padding: 9px 10px 9px 30px;
       height: 23px;
       line-height: 23px;
-      cursor: pointer;
-      &:hover {
-        color: var(--blue-color);
-      }
+      user-select: none;
     }
   }
   .subBanner {

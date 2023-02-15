@@ -35,7 +35,6 @@ const MainSection = styled.main`
         width: 53px;
         height: 53px;
         margin-bottom: 15px;
-        cursor: pointer;
         overflow: hidden;
       }
       img {

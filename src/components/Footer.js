@@ -63,7 +63,6 @@ const FooterBox = styled.footer`
       border: 1px solid #666;
       padding: 0 20px;
       box-sizing: border-box;
-      cursor: pointer;
       margin-bottom: 20px;
       img {
         width: 11px;
@@ -139,9 +138,12 @@ function Footer() {
           </ul>
         </li>
         <li className="copyright">
-          서울특별시 서초구 신반포로 194 통신판매업신고: 2009-서울서초 0587호 대표자 : 이광재
+          서울특별시 서초구 신반포로 194 통신판매업신고: 2009-서울서초 0587호
+          대표자 : 이광재
         </li>
-        <li className="copyright">COPYRIGHT© 2016. WWW.KOBUS.CO.KR . ALL RIGHT RESERVED</li>
+        <li className="copyright">
+          COPYRIGHT© 2016. WWW.KOBUS.CO.KR . ALL RIGHT RESERVED
+        </li>
       </ul>
       <div className="sideBox">
         <div
@@ -151,9 +153,15 @@ function Footer() {
           }}>
           관련사이트
           {otherChk ? (
-            <img src={`${path}/images/bu_selectArrow.png`} alt="화살표 아이콘" />
+            <img
+              src={`${path}/images/bu_selectArrow.png`}
+              alt="화살표 아이콘"
+            />
           ) : (
-            <img src={`${path}/images/bu_selectArrowC.png`} alt="화살표 아이콘" />
+            <img
+              src={`${path}/images/bu_selectArrowC.png`}
+              alt="화살표 아이콘"
+            />
           )}
           {otherChk && (
             <ul>

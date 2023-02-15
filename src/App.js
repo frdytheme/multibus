@@ -7,7 +7,6 @@ import Home from "./components/Home";
 import Navigation from "./components/Navigation";
 import RouteInfo from "./components/RouteInfo";
 import TicketBox from "./components/TicketBox";
-import UserNav from "./components/UserNav";
 
 function App() {
   const modalToggle = useSelector((state) => state.modalSwitch.ticketToggle);
@@ -18,7 +17,6 @@ function App() {
       {modalToggle && <TicketBox />}
       {confirmToggle && <ConfirmModal />}
       <Navigation />
-      <UserNav />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/routeInfo" element={<RouteInfo />} />
