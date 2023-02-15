@@ -22,7 +22,7 @@ function ArrTrmlList() {
   return (
     <>
       <ul>
-        {trmlNum === "all"
+        {trmlNum === "all" && fetchStatus !== "failed"
           ? alignRoute.map((trml) => {
               return (
                 <li
@@ -50,10 +50,14 @@ function ArrTrmlList() {
                 );
               })}
       </ul>
-      {fetchStatus === "success" && alignRoute.length < 1 ? (
+      {fetchStatus === "success" && alignRoute.length === 0 ? (
         <strong>현재 시간 예매 가능한 터미널이 없습니다.</strong>
-      ) : fetchStatus === "failed" && alignRoute.length === 0 ? (
-        <strong>선택하신 날짜로 검색되는 터미널이 없습니다. 오늘 날짜 기준 2일 이후까지 검색 가능합니다.</strong>
+      ) : fetchStatus === "failed" ? (
+        <strong>
+          선택하신 날짜로 검색되는 터미널이 없습니다.
+          <br />
+          평균 1일 ~ 최대 2일 후까지 검색 가능합니다.
+        </strong>
       ) : null}
     </>
   );

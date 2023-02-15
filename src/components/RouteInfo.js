@@ -463,9 +463,6 @@ function RouteInfo() {
 
   const timeTable = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
 
-  console.log(alignTrml);
-  console.log(routeRes);
-
   // datePick 변경 시 터미널 리스트 재출력
   useEffect(() => {
     dispatch(fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 }));
@@ -583,7 +580,13 @@ function RouteInfo() {
                         return (
                           <ul
                             key={idx}
-                            className={depPlandTime < currentTime && depDate === currentToday ? `disabled` : "show"}>
+                            className={
+                              depPlandTime < currentTime &&
+                              depDate === currentToday &&
+                              depPlandTime.toString().slice(8, 10) !== "00"
+                                ? `disabled`
+                                : null
+                            }>
                             <li>{changeTime(depPlandTime)}</li>
                             <li>
                               <img src={`${path}/images/bus_company${ranNum}.png`} alt="고속사" />
@@ -595,7 +598,7 @@ function RouteInfo() {
                           </ul>
                         );
                       })
-                    ) : alignTrml.length === 0 ? (
+                    ) : alignTrml.length === 0 && busGrade ? (
                       <ul className="fetchFailed">
                         <li>
                           해당 좌석의 도착 정보를 찾을 수 없습니다.

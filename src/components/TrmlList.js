@@ -35,6 +35,7 @@ const TrmlBoard = styled.li`
       width: 100%;
       padding-left: 30px;
       border-left: 1px solid #e6e6e6;
+      position: relative;
       ul {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -51,6 +52,17 @@ const TrmlBoard = styled.li`
             color: var(--blue-color);
           }
         }
+      }
+      strong {
+        position: absolute;
+        font-size: 17px;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #666;
+        width:100%;
+        text-align: center;
+        line-height:2.5;
       }
     }
   }
@@ -112,27 +124,22 @@ function TrmlList() {
             </li>
             {province.map((province) => {
               return (
-                <li
-                  key={province.id}
-                  id={province.id}
-                  onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
+                <li key={province.id} id={province.id} onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
                   {province.name}
                 </li>
               );
             })}
           </ul>
         </div>
-        <div className="cityItem">
-          {depTrml ? <ArrTrmlList /> : <DepTrmlList />}
-        </div>
+        <div className="cityItem">{depTrml ? <ArrTrmlList /> : <DepTrmlList />}</div>
       </div>
-      {(depTrml && fetchStatus === "ready") && (
+      {depTrml && fetchStatus === "ready" && (
         <div className="loading">
-          {fetchStatus === "ready"
-            ? <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
-            : fetchStatus === "failed"
-            ? "터미널 검색에 실패했습니다."
-            : null}
+          {fetchStatus === "ready" ? (
+            <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
+          ) : fetchStatus === "failed" ? (
+            "터미널 검색에 실패했습니다."
+          ) : null}
         </div>
       )}
     </TrmlBoard>

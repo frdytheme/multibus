@@ -5,7 +5,7 @@ import { fetchCityCode } from "../store/fetchCitySlice";
 import { confirmToggle, modalToggle } from "../store/ticketModalToggleSlice";
 import { changeArrDep, initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml, setTrml } from "../store/departTrmlSlice";
-import { nowDay, nxtDay, nxtDepTime, path } from "../asset/DB/requestUrl";
+import { nowDay, nxtDay, path, today, tommorrow } from "../asset/DB/requestUrl";
 import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { setGrade } from "../store/getGradeSlice";
 import { inputDepDate, inputToday } from "../store/getDateSlice";
@@ -327,9 +327,7 @@ function Ticketing() {
   const depTrmlObj = useSelector((state) => state.depTrml.data);
   const arrTrml = useSelector((state) => state.arrTrml.data.terminalNm);
   const arrTrmlObj = useSelector((state) => state.arrTrml.data);
-  const today = useSelector((state) => state.getDate.showToday);
-  const [oneWay, setOneWay] = useState(false);
-  const [check, setCheck] = useState(false);
+  const showToday = useSelector((state) => state.getDate.showToday);
   const [dateChk, setDateChk] = useState(false);
   const gradeRef = useRef(null);
   const depDate = useSelector(state => state.getDate.depDate);
@@ -353,13 +351,6 @@ function Ticketing() {
     dispatch(confirmToggle());
   };
 
-  // 출도착지 초기화 함수.
-  const initPlace = () => {
-    dispatch(initTrml());
-    dispatch(initArrTrml());
-  };
-
-  console.log(depDate)
 
   // 출도착지 반전 함수.
   const changePlace = () => {
@@ -413,7 +404,7 @@ function Ticketing() {
           <li className="dateBox">
             <div className="dateTxt">
               <p>가는날</p>
-              <span>{dateChk ? nxtDay : today}</span>
+              <span>{showToday}</span>
             </div>
             <div className="dateChoice">
               <span
@@ -421,6 +412,7 @@ function Ticketing() {
                 onClick={() => {
                   setDateChk(false);
                   dispatch(inputToday(nowDay))
+                  dispatch(inputDepDate(today))
                 }}>
                 오늘
               </span>
@@ -428,6 +420,8 @@ function Ticketing() {
                 className={`${dateChk && "checked"}`}
                 onClick={() => {
                   setDateChk(true);
+                  dispatch(inputDepDate(tommorrow))
+                  dispatch(inputToday(nxtDay))
                 }}>
                 내일
               </span>
