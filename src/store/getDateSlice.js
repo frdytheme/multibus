@@ -13,7 +13,7 @@ const initialState = {
   showToday: nowDay,
   showNxtday: nxtDay,
   currentDepTime: currentDepTime,
-  newDate: "",
+  newDate: JSON.stringify(new Date()),
 };
 
 export const getDateSlice = createSlice({

@@ -269,13 +269,11 @@ const RouteInformation = styled.div`
               &:first-child::before,
               &:nth-child(2)::before,
               &:nth-child(3)::before {
-                background: url(${path}/images/ico_night.png) no-repeat 50% /
-                  cover;
+                background: url(${path}/images/ico_night.png) no-repeat 50% / cover;
               }
               &::before {
                 content: "";
-                background: url(${path}/images/ico_daytime.png) no-repeat 50% /
-                  cover;
+                background: url(${path}/images/ico_daytime.png) no-repeat 50% / cover;
                 display: block;
                 width: 16px;
                 height: 16px;
@@ -417,16 +415,19 @@ function RouteInfo() {
   };
 
   // 전체 도착지 리스트에서 선택한 도착지,버스 등급으로 필터링
-  const filterTrml = routeRes.filter((route) => {
-    return (
-      route.arrPlaceNm === arrTrml.data.terminalNm &&
-      route.gradeNm.includes(busGrade)
-    );
-  });
+  // 밤 12시 ~ 새벽에 이틀 뒤를 검색하면 API가 undefined 반환 오류 방지
+  let filterTrml = [];
+  if (routeRes === undefined) {
+  } else {
+    filterTrml = routeRes.filter((route) => {
+      return route.arrPlaceNm === arrTrml.data.terminalNm && route.gradeNm.includes(busGrade);
+    });
+  }
 
   // 출발 시간이 밤 12시 이후면 리스트 끝으로 이동.
   const alignTrml = [
-    ...filterTrml.filter((time) => {
+    ...filterTrml
+    .filter((time) => {
       return time.arrPlandTime > `${depDate}0500` * 1;
     }),
     ...filterTrml.filter((time) => {
@@ -443,17 +444,13 @@ function RouteInfo() {
     const arrHour = alignTrml[0].arrPlandTime.toString().slice(8, 10);
     const arrMin = alignTrml[0].arrPlandTime.toString().slice(10, 12);
     const hour =
-      arrHour === "00" ||
-      arrHour === "01" ||
-      arrHour === "02" ||
-      arrHour === "03"
+      arrHour === "00" || arrHour === "01" || arrHour === "02" || arrHour === "03"
         ? arrHour * 1 + 24 - depHour
         : arrHour - depHour;
     const min = arrMin - depMin;
     roadDistance = `약 ${90 * hour}km`;
     return `${hour}시간 ${min < 0 ? min * -1 : min}분 소요`;
   };
-  console.log(alignTrml);
 
   // 총 리스트에서 좌석 등급만 중복 제거 후 return
   const gradeList = alignTrml.filter((trml, idx, route) => {
@@ -498,9 +495,7 @@ function RouteInfo() {
       </div>
       <ul className="sideMenu">
         <li>HOME</li>
-        <li
-          className={`${sideShow && "show"}`}
-          onClick={() => handleSideMenu()}>
+        <li className={`${sideShow && "show"}`} onClick={() => handleSideMenu()}>
           고속버스예매
           {sideShow ? (
             <img src={`${path}/images/bu_selectArrowC.png`} alt="아래 화살표" />
@@ -559,10 +554,7 @@ function RouteInfo() {
             <div className="handler">
               <div className="datePicker">
                 <div className="refreshBtn">
-                  <img
-                    src={`${path}/images/ico_refresh_s.png`}
-                    alt="새로고침 아이콘"
-                  />
+                  <img src={`${path}/images/ico_refresh_s.png`} alt="새로고침 아이콘" />
                 </div>
                 <p>{showToday}</p>
                 <div className="picker">
@@ -574,9 +566,7 @@ function RouteInfo() {
               <ul className="timeTable">
                 {timeTable.map((time) => {
                   return (
-                    <li
-                      key={time}
-                      className={time < currentHour ? "disabled" : undefined}>
+                    <li key={time} className={time < currentHour ? "disabled" : undefined}>
                       {time}
                     </li>
                   );
@@ -608,17 +598,9 @@ function RouteInfo() {
                             }>
                             <li>{changeTime(depPlandTime)}</li>
                             <li>
-                              <img
-                                src={`${path}/images/bus_company${ranNum}.png`}
-                                alt="고속사"
-                              />
+                              <img src={`${path}/images/bus_company${ranNum}.png`} alt="고속사" />
                             </li>
-                            <li
-                              className={`${
-                                gradeNm.includes("프리미엄") && "premium"
-                              }`}>
-                              {gradeNm}
-                            </li>
+                            <li className={`${gradeNm.includes("프리미엄") && "premium"}`}>{gradeNm}</li>
                             <li></li>
                             <li>36석</li>
                             <li className="submitRoute">선택</li>
