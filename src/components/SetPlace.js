@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { path } from "../asset/DB/requestUrl";
 import { focusBorder } from "../asset/style/GlobalStyle";
 import { setTrml } from "../store/departTrmlSlice";
 
@@ -19,6 +20,16 @@ const SetTrml = styled.li`
     height: 32px;
     border: 1px solid #ddd;
     background-color: #fff;
+    &::before {
+      content: "";
+      position: absolute;
+      background: url(${path}/images/ico_arrow_modal.png) no-repeat 50% / cover;
+      width: 40px;
+      height: 27px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
   }
   p {
     width: 272px;
@@ -66,10 +77,7 @@ function SetPlace() {
         onClick={() => dispatch(setTrml(""))}>
         출발지<span>{depTrml}</span>
       </p>
-      <div
-        className="arrow" >
-        화살표
-      </div>
+      <div className="arrow">화살표</div>
       <p className={`${depStatus || (depTrml && "focus")}`}>
         도착지<span>{arrTrml ? arrTrml : "선택"}</span>
       </p>

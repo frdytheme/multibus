@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { currentHour, nowDay, path, today } from "../asset/DB/requestUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { fetchRoute } from "../store/fetchRouteSlice";
 import { inputDepDate, inputToday } from "../store/getDateSlice";
 import { initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml } from "../store/departTrmlSlice";
 import { setGrade } from "../store/getGradeSlice";
+import DatePickerRouteInfo from "../asset/DB/DatePickerRouteInfo";
 
 const RouteInformation = styled.div`
   width: 100%;
@@ -269,11 +269,13 @@ const RouteInformation = styled.div`
               &:first-child::before,
               &:nth-child(2)::before,
               &:nth-child(3)::before {
-                background: url(${path}/images/ico_night.png) no-repeat 50% / cover;
+                background: url(${path}/images/ico_night.png) no-repeat 50% /
+                  cover;
               }
               &::before {
                 content: "";
-                background: url(${path}/images/ico_daytime.png) no-repeat 50% / cover;
+                background: url(${path}/images/ico_daytime.png) no-repeat 50% /
+                  cover;
                 display: block;
                 width: 16px;
                 height: 16px;
@@ -395,16 +397,19 @@ const RouteInformation = styled.div`
 function RouteInfo() {
   const dispatch = useDispatch();
   const [sideShow, setSideShow] = useState(false);
-  const showToday = useSelector((state) => state.getDate.showToday);
-  const currentTime = useSelector((state) => state.getDate.currentDepTime);
+  const getDate = useSelector((state) => state.getDate);
+  const showToday = getDate.showToday;
+  const depDate = getDate.depDate;
+  const currentTime = getDate.currentDepTime;
   const depTrml = useSelector((state) => state.depTrml);
   const arrTrml = useSelector((state) => state.arrTrml);
-  const routeRes = useSelector((state) => state.expRoute.data);
-  const routeStatus = useSelector((state) => state.expRoute.status);
+  const depId = depTrml.data.terminalId;
+  const arrId = arrTrml.data.terminalId;
+  const expRoute = useSelector((state) => state.expRoute);
+  const routeRes = expRoute.data;
+  const routeStatus = expRoute.status;
   const busGrade = useSelector((state) => state.getGrade.data);
-  const depDate = useSelector((state) => state.getDate.depDate);
-  const arrId = useSelector((state) => state.arrTrml.data.terminalId);
-  const depId = useSelector((state) => state.depTrml.data.terminalId);
+
   const currentToday = today;
 
   const handleSideMenu = () => {
@@ -413,7 +418,10 @@ function RouteInfo() {
 
   // 전체 도착지 리스트에서 선택한 도착지,버스 등급으로 필터링
   const filterTrml = routeRes.filter((route) => {
-    return route.arrPlaceNm === arrTrml.data.terminalNm && route.gradeNm.includes(busGrade);
+    return (
+      route.arrPlaceNm === arrTrml.data.terminalNm &&
+      route.gradeNm.includes(busGrade)
+    );
   });
 
   // 출발 시간이 밤 12시 이후면 리스트 끝으로 이동.
@@ -435,13 +443,17 @@ function RouteInfo() {
     const arrHour = alignTrml[0].arrPlandTime.toString().slice(8, 10);
     const arrMin = alignTrml[0].arrPlandTime.toString().slice(10, 12);
     const hour =
-      arrHour === "00" || arrHour === "01" || arrHour === "02" || arrHour === "03"
+      arrHour === "00" ||
+      arrHour === "01" ||
+      arrHour === "02" ||
+      arrHour === "03"
         ? arrHour * 1 + 24 - depHour
         : arrHour - depHour;
     const min = arrMin - depMin;
     roadDistance = `약 ${90 * hour}km`;
-    return `${hour}시간 ${min}분 소요`;
+    return `${hour}시간 ${min < 0 ? min * -1 : min}분 소요`;
   };
+  console.log(alignTrml);
 
   // 총 리스트에서 좌석 등급만 중복 제거 후 return
   const gradeList = alignTrml.filter((trml, idx, route) => {
@@ -463,7 +475,7 @@ function RouteInfo() {
 
   const timeTable = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
 
-  // datePick 변경 시 터미널 리스트 재출력
+  // datePick, grade 변경 시 터미널 리스트 재출력
   useEffect(() => {
     dispatch(fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 }));
   }, [depDate, busGrade]);
@@ -486,7 +498,9 @@ function RouteInfo() {
       </div>
       <ul className="sideMenu">
         <li>HOME</li>
-        <li className={`${sideShow && "show"}`} onClick={() => handleSideMenu()}>
+        <li
+          className={`${sideShow && "show"}`}
+          onClick={() => handleSideMenu()}>
           고속버스예매
           {sideShow ? (
             <img src={`${path}/images/bu_selectArrowC.png`} alt="아래 화살표" />
@@ -545,11 +559,14 @@ function RouteInfo() {
             <div className="handler">
               <div className="datePicker">
                 <div className="refreshBtn">
-                  <img src={`${path}/images/ico_refresh_s.png`} alt="새로고침 아이콘" />
+                  <img
+                    src={`${path}/images/ico_refresh_s.png`}
+                    alt="새로고침 아이콘"
+                  />
                 </div>
                 <p>{showToday}</p>
                 <div className="picker">
-                  <DatePickerCustom />
+                  <DatePickerRouteInfo />
                 </div>
               </div>
             </div>
@@ -557,7 +574,9 @@ function RouteInfo() {
               <ul className="timeTable">
                 {timeTable.map((time) => {
                   return (
-                    <li key={time} className={time < currentHour ? "disabled" : undefined}>
+                    <li
+                      key={time}
+                      className={time < currentHour ? "disabled" : undefined}>
                       {time}
                     </li>
                   );
@@ -589,9 +608,17 @@ function RouteInfo() {
                             }>
                             <li>{changeTime(depPlandTime)}</li>
                             <li>
-                              <img src={`${path}/images/bus_company${ranNum}.png`} alt="고속사" />
+                              <img
+                                src={`${path}/images/bus_company${ranNum}.png`}
+                                alt="고속사"
+                              />
                             </li>
-                            <li className={`${gradeNm.includes("프리미엄") && "premium"}`}>{gradeNm}</li>
+                            <li
+                              className={`${
+                                gradeNm.includes("프리미엄") && "premium"
+                              }`}>
+                              {gradeNm}
+                            </li>
                             <li></li>
                             <li>36석</li>
                             <li className="submitRoute">선택</li>

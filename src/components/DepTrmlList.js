@@ -17,7 +17,6 @@ function DepallDepTrmlList() {
                 key={trml.terminalId}
                 onClick={() => {
                   dispatch(setTrml(trml));
-                  // 출도착지 기반 예매 가능한 터미널 자동 검색.
                   dispatch(fetchRoute({ dep: trml.terminalId, date: depDate }));
                 }}>
                 {trml.terminalNm}
@@ -32,7 +31,6 @@ function DepallDepTrmlList() {
                   key={trml.terminalId}
                   onClick={() => {
                     dispatch(setTrml(trml));
-                    // 출도착지 기반 예매 가능한 터미널 자동 검색.
                     dispatch(fetchRoute({ dep: trml.terminalId, date: depDate }));
                   }}>
                   {trml.terminalNm}

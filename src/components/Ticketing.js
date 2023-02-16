@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCityCode } from "../store/fetchCitySlice";
 import { confirmToggle, modalToggle } from "../store/ticketModalToggleSlice";
 import { changeArrDep, initArrTrml } from "../store/arrTrmlSlice";
 import { initTrml, setTrml } from "../store/departTrmlSlice";
@@ -323,14 +322,14 @@ const TicketingOption = styled.section`
 
 function Ticketing() {
   const dispatch = useDispatch();
-  const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
-  const depTrmlObj = useSelector((state) => state.depTrml.data);
-  const arrTrml = useSelector((state) => state.arrTrml.data.terminalNm);
-  const arrTrmlObj = useSelector((state) => state.arrTrml.data);
+  const depTrml = useSelector((state) => state.depTrml.data);
+  const arrTrml = useSelector((state) => state.arrTrml.data);
+  const depTrmlNm = depTrml.terminalNm;
+  const arrTrmlNm = arrTrml.terminalNm;
+
   const showToday = useSelector((state) => state.getDate.showToday);
   const [dateChk, setDateChk] = useState(false);
   const gradeRef = useRef(null);
-  const depDate = useSelector(state => state.getDate.depDate);
 
   // 버스 등급 체크 classList 라디오버튼 로직
   const handleGradeChk = () => {
@@ -354,14 +353,13 @@ function Ticketing() {
 
   // 출도착지 반전 함수.
   const changePlace = () => {
-    const currentArr = { ...depTrmlObj };
-    dispatch(setTrml(arrTrmlObj));
+    const currentArr = { ...depTrml };
+    dispatch(setTrml(arrTrmlNm));
     dispatch(changeArrDep(currentArr));
   };
 
   useEffect(() => {
     handleGradeChk();
-    dispatch(fetchCityCode());
   }, []);
 
   return (
@@ -386,7 +384,7 @@ function Ticketing() {
                 dispatch(initTrml());
               }}>
               출발지
-              <span style={depTrml && { color: "#000" }}>{depTrml ? depTrml : "선택"}</span>
+              <span style={depTrmlNm && { color: "#000" }}>{depTrmlNm ? depTrmlNm : "선택"}</span>
             </p>
             <div
               className="toggleIcon"
@@ -398,7 +396,7 @@ function Ticketing() {
                 dispatch(modalToggle());
               }}>
               도착지
-              <span style={depTrml && { color: "#000" }}>{arrTrml ? arrTrml : "선택"}</span>
+              <span style={depTrmlNm && { color: "#000" }}>{arrTrmlNm ? arrTrmlNm : "선택"}</span>
             </p>
           </li>
           <li className="dateBox">
@@ -460,9 +458,9 @@ function Ticketing() {
           </li>
           <li>
             <button
-              className={`${depTrml && arrTrml && "full"}`}
+              className={`${depTrmlNm && arrTrmlNm && "full"}`}
               onClick={() => {
-                if (depTrml && arrTrml) {
+                if (depTrmlNm && arrTrmlNm) {
                   confirmAlert();
                 } else {
                   alert("출발지와 도착지를 선택해주세요.");

@@ -60,9 +60,9 @@ const TrmlBoard = styled.li`
         left: 50%;
         transform: translateX(-50%);
         color: #666;
-        width:100%;
+        width: 100%;
         text-align: center;
-        line-height:2.5;
+        line-height: 2.5;
       }
     }
   }
@@ -124,22 +124,23 @@ function TrmlList() {
             </li>
             {province.map((province) => {
               return (
-                <li key={province.id} id={province.id} onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
+                <li
+                  key={province.id}
+                  id={province.id}
+                  onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
                   {province.name}
                 </li>
               );
             })}
           </ul>
         </div>
-        <div className="cityItem">{depTrml ? <ArrTrmlList /> : <DepTrmlList />}</div>
+        <div className="cityItem">
+          {depTrml ? <ArrTrmlList /> : <DepTrmlList />}
+        </div>
       </div>
       {depTrml && fetchStatus === "ready" && (
         <div className="loading">
-          {fetchStatus === "ready" ? (
-            <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
-          ) : fetchStatus === "failed" ? (
-            "터미널 검색에 실패했습니다."
-          ) : null}
+          <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
         </div>
       )}
     </TrmlBoard>

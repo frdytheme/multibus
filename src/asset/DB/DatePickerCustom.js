@@ -4,7 +4,7 @@ import ko from "date-fns/locale/ko";
 import { forwardRef, useState } from "react";
 import "../style/datePickerCustom.css";
 import { path, today } from "./requestUrl";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   inputCurrentTime,
   inputDepDate,
@@ -16,10 +16,16 @@ import {
 
 const DatePickerCustom = () => {
   const dispatch = useDispatch();
+  const newDate = useSelector((state) => state.getDate.newDate);
 
   const [startDate, setStartDate] = useState(new Date());
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <img src={`${path}/images/ico_calender.png`} alt="캘린더 아이콘" onClick={onClick} ref={ref} />
+    <img
+      src={`${path}/images/ico_calender.png`}
+      alt="캘린더 아이콘"
+      onClick={onClick}
+      ref={ref}
+    />
   ));
 
   // 날짜 / 시간 변경 로직
@@ -42,7 +48,9 @@ const DatePickerCustom = () => {
     }
     const min = minutes < 10 ? "0" + minutes : minutes;
     const prevTime = `${prevHour < 10 ? "0" + prevHour : prevHour}${min}`;
-    const currentTime = `${currentHour < 10 ? "0" + currentHour : currentHour}${min}`;
+    const currentTime = `${
+      currentHour < 10 ? "0" + currentHour : currentHour
+    }${min}`;
     const currentDepTime = `${today}${currentTime}` * 1;
     const depTime = `${isToday}${prevTime}` * 1;
     dispatch(inputCurrentTime(currentDepTime));
@@ -54,13 +62,19 @@ const DatePickerCustom = () => {
     const week = ["일", "월", "화", "수", "목", "금", "토"];
 
     // 년.월.일.요일 변수
-    const nowDay = year + ". " + month.slice(1, 2) + ". " + day + ". " + week[getWeek];
+    const nowDay =
+      year + ". " + month.slice(1, 2) + ". " + day + ". " + week[getWeek];
     const nxtDay =
-      year + ". " + month.slice(1, 2) + ". " + (day * 1 + 1) + ". " + week[getWeek !== 6 ? getWeek + 1 : 0];
+      year +
+      ". " +
+      month.slice(1, 2) +
+      ". " +
+      (day * 1 + 1) +
+      ". " +
+      week[getWeek !== 6 ? getWeek + 1 : 0];
 
     dispatch(inputToday(nowDay));
     dispatch(inputNxtday(nxtDay));
-    dispatch(inputNewDate(JSON.stringify(new Date())));
   };
 
   return (
@@ -69,6 +83,7 @@ const DatePickerCustom = () => {
       onChange={(date) => {
         setStartDate(date);
         setDateandTime(date);
+        dispatch(inputNewDate(JSON.stringify(date)));
       }}
       locale={ko}
       minDate={new Date()}
