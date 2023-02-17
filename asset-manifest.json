@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/multibus/static/css/main.62a34700.css",
-    "main.js": "/multibus/static/js/main.7d9913f7.js",
+    "main.js": "/multibus/static/js/main.f297fa59.js",
     "index.html": "/multibus/index.html",
     "main.62a34700.css.map": "/multibus/static/css/main.62a34700.css.map",
-    "main.7d9913f7.js.map": "/multibus/static/js/main.7d9913f7.js.map"
+    "main.f297fa59.js.map": "/multibus/static/js/main.f297fa59.js.map"
   },
   "entrypoints": [
     "static/css/main.62a34700.css",
-    "static/js/main.7d9913f7.js"
+    "static/js/main.f297fa59.js"
   ]
 }
