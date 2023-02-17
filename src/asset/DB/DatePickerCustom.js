@@ -4,7 +4,7 @@ import ko from "date-fns/locale/ko";
 import { forwardRef, useState } from "react";
 import "../style/datePickerCustom.css";
 import { path, today } from "./requestUrl";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   inputCurrentTime,
   inputDepDate,
@@ -16,8 +16,6 @@ import {
 
 const DatePickerCustom = () => {
   const dispatch = useDispatch();
-  const newDate = useSelector((state) => state.getDate.newDate);
-
   const [startDate, setStartDate] = useState(new Date());
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <img
