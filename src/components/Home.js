@@ -9,6 +9,9 @@ const MainSection = styled.main`
   color: #fff;
   width: calc(100% - 220px);
   margin-left: auto;
+  @media screen and (max-width: 1280px) {
+    width: calc(100% - 60px);
+  }
   height: calc(100vh - 150px);
   text-align: center;
   position: relative;
@@ -76,10 +79,71 @@ const MainSection = styled.main`
       }
     }
   }
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 339px;
+    section {
+      display: none;
+    }
+    h1 {
+      display: none;
+    }
+    .subGnb {
+      width: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-flow: column;
+      gap: 0;
+      li {
+        display: none;
+      }
+      .mobileBtn {
+        display: block;
+        font-size: 22px;
+        width: 100%;
+        height: 106px;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+        p {
+          padding-left: 20px;
+        }
+        .subBtn {
+          transform: scale(1.05);
+          margin: 0;
+        }
+        &:nth-child(1) {
+          height: 127px;
+          padding-top: 50px;
+          .subBtn::after {
+            transform: translateX(0);
+          }
+        }
+        &:nth-child(2) {
+          background-color: rgba(68, 104, 158, 0.5);
+          .subBtn::after {
+            transform: translateX(-116px);
+          }
+        }
+        &:nth-child(3) {
+          background-color: rgba(71, 33, 121, 0.5);
+          .subBtn::after {
+            transform: translateX(-232px);
+          }
+        }
+        .subBtn::after {
+          transform: translateX(0);
+        }
+      }
+    }
+  }
 `;
 
 function Home(props) {
-
   const subGnbRef = useRef(null);
 
   const handleGnb = () => {
@@ -100,29 +164,29 @@ function Home(props) {
     <MainSection>
       <h1>즐거운 여행의 시작과 끝, 프리미엄 버스와 함께!</h1>
       <ul className="subGnb" ref={subGnbRef}>
-        <li>
+        <li className="mobileBtn">
           <div className="subBtn on"></div>
-          고속버스예매
+          <p>고속버스예매</p>
+        </li>
+        <li className="mobileBtn">
+          <div className="subBtn"></div>
+          <p>예매확인</p>
+        </li>
+        <li className="mobileBtn">
+          <div className="subBtn"></div>
+          <p>도착시간안내</p>
         </li>
         <li>
           <div className="subBtn"></div>
-          예매확인
+          <p>프리패스</p>
         </li>
         <li>
           <div className="subBtn"></div>
-          도착시간안내
-        </li>
-        <li>
-          <div className="subBtn"></div>
-          프리패스
-        </li>
-        <li>
-          <div className="subBtn"></div>
-          휠체어사이트
+          <p>휠체어사이트</p>
         </li>
       </ul>
-      <Banner />
       <Ticketing />
+      <Banner />
     </MainSection>
   );
 }

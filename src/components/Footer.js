@@ -5,6 +5,13 @@ import { path } from "../asset/DB/requestUrl";
 const FooterBox = styled.footer`
   background-color: #2e2d3d;
   width: calc(100% - 220px);
+  @media screen and (max-width: 1280px) {
+    width: calc(100% - 60px);
+    overflow: hidden;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   height: 150px;
   margin-left: auto;
   padding: 30px 20px;
@@ -138,12 +145,9 @@ function Footer() {
           </ul>
         </li>
         <li className="copyright">
-          서울특별시 서초구 신반포로 194 통신판매업신고: 2009-서울서초 0587호
-          대표자 : 이광재
+          서울특별시 서초구 신반포로 194 통신판매업신고: 2009-서울서초 0587호 대표자 : 이광재
         </li>
-        <li className="copyright">
-          COPYRIGHT© 2016. WWW.KOBUS.CO.KR . ALL RIGHT RESERVED
-        </li>
+        <li className="copyright">COPYRIGHT© 2016. WWW.KOBUS.CO.KR . ALL RIGHT RESERVED</li>
       </ul>
       <div className="sideBox">
         <div
@@ -153,15 +157,9 @@ function Footer() {
           }}>
           관련사이트
           {otherChk ? (
-            <img
-              src={`${path}/images/bu_selectArrow.png`}
-              alt="화살표 아이콘"
-            />
+            <img src={`${path}/images/bu_selectArrow.png`} alt="화살표 아이콘" />
           ) : (
-            <img
-              src={`${path}/images/bu_selectArrowC.png`}
-              alt="화살표 아이콘"
-            />
+            <img src={`${path}/images/bu_selectArrowC.png`} alt="화살표 아이콘" />
           )}
           {otherChk && (
             <ul>

@@ -58,7 +58,7 @@ const BannerBox = styled.ul`
     }
     .infomation {
       display: flex;
-      width:90%;
+      width: 90%;
       align-items: center;
       justify-content: space-evenly;
       padding: 10px 0;
@@ -75,6 +75,21 @@ const BannerBox = styled.ul`
         }
       }
     }
+  }
+  @media screen and (max-width: 1280px) {
+    li {
+      span {
+        font-size: 13px;
+      }
+      p {
+        font-size: 16px;
+        line-height: 1.2;
+        padding-top: 10px; 
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 `;
 function Banner(props) {

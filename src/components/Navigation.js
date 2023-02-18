@@ -16,7 +16,6 @@ const Nav = styled.nav`
   top: 0;
   left: 0;
   letter-spacing: -0.4px;
-  border-right: 1px solid #ddd;
   h1 {
     a {
       font-size: 13px;
@@ -39,6 +38,9 @@ const Nav = styled.nav`
       height: 23px;
       line-height: 23px;
       user-select: none;
+      .tabImg {
+        display: none;
+      }
     }
   }
   .subBanner {
@@ -86,6 +88,84 @@ const Nav = styled.nav`
       }
     }
   }
+  @media screen and (max-width: 1280px) {
+    width: 60px;
+    h1 {
+      a {
+        img {
+          width: 38px;
+          height: 34px;
+        }
+        span {
+          display: none;
+        }
+      }
+    }
+    .mainGnb li {
+      position: relative;
+      p {
+        display: none;
+      }
+      .tabImg {
+        display: block;
+        width: 24px;
+        height: 22px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      &:nth-of-type(3) .tabImg {
+        width: 20px;
+        height: 21px;
+      }
+      &:nth-of-type(4) .tabImg {
+        width: 23px;
+        height: 20px;
+      }
+      &:nth-of-type(5) .tabImg {
+        width: 21px;
+        height: 24px;
+      }
+      &:nth-of-type(6) .tabImg {
+        width: 22px;
+        height: 20px;
+      }
+      &:nth-of-type(8) .tabImg {
+        width: 21px;
+        height: 27px;
+      }
+      &:nth-of-type(9) .tabImg {
+        width: 28px;
+        height: 25px;
+      }
+      &:nth-of-type(10) .tabImg {
+        width: 19px;
+        height: 27px;
+      }
+    }
+    .subBanner {
+      display: none;
+    }
+    .tabIcon {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 150px;
+      display: grid;
+      grid-template-rows: 2fr 1fr;
+      div {
+        border-top: 1px solid #e5e5e5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+   display: none; 
+  }
 `;
 
 function Navigation() {
@@ -104,19 +184,48 @@ function Navigation() {
             dispatch(setGrade(0));
           }}>
           <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
-          고속버스통합예매
+          <span>고속버스통합예매</span>
         </Link>
       </h1>
       <ul className="mainGnb">
-        <li>고속버스예매</li>
-        <li>예매확인</li>
-        <li>운행정보</li>
-        <li>고속버스 프리패스/정기권</li>
-        <li>이용안내</li>
-        <li>공지사항</li>
-        <li>고객센터</li>
-        <li>전국고속버스운송사업조합</li>
-        <li>터미널사업자협회</li>
+        <li className="tabMenu tabImg">
+          <img src={`${path}/images/view_tablet`} alt="" />
+        </li>
+        <li>
+          <img src={`${path}/images/menu01.png`} alt="" className="tabImg" />
+          <p>고속버스예매</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu02.png`} alt="" className="tabImg" />
+          <p>예매확인</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu03.png`} alt="" className="tabImg" />
+          <p>운행정보</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu04.png`} alt="" className="tabImg" />
+          <p>고속버스 프리패스/정기권</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu06.png`} alt="" className="tabImg" />
+          <p>이용안내</p>
+        </li>
+        <li>
+          <p>공지사항</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu09.png`} alt="" className="tabImg" />
+          <p>고객센터</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu07.png`} alt="" className="tabImg" />
+          <p>전국고속버스운송사업조합</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu08.png`} alt="" className="tabImg" />
+          <p>터미널사업자협회</p>
+        </li>
       </ul>
       <ul className="subBanner">
         <li>
@@ -145,6 +254,14 @@ function Navigation() {
           <em>2023.02.14</em>
         </li>
       </ul>
+      <div className="tabIcon">
+        <div>
+          <img src={`${path}/images/ico_app.png`} alt="" />
+        </div>
+        <div>
+          <img src={`${path}/images/ico_notice.png`} alt="" />
+        </div>
+      </div>
     </Nav>
   );
 }

@@ -15,6 +15,7 @@ const RouteInformation = styled.div`
   background-color: #ddd;
   padding-left: 220px;
   box-sizing: border-box;
+  border-left: 1px solid #ddd;
   .currentStatus {
     height: 180px;
     background: url(${path}/images/visual_route_bg.jpg) no-repeat 50% / cover;
