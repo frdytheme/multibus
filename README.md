@@ -4,7 +4,7 @@
 #### 작업 기간 - 2023년 2월 8일 → 2023년 2월 15일
 #### 작업 유형 - 개인프로젝트(포트폴리오)
 
-![메인페이지img](./public/images/README_project_img.png)
+![메인페이지](./public/images/README_project_img.png)
 
 
 ## 프로젝트 목표
