@@ -42,6 +42,9 @@ const Nav = styled.nav`
         display: none;
       }
     }
+    .tabMenu {
+      display: none;
+    }
   }
   .subBanner {
     li {
@@ -91,6 +94,7 @@ const Nav = styled.nav`
   @media screen and (max-width: 1280px) {
     width: 60px;
     h1 {
+      margin: 75px 0 65px;
       a {
         img {
           width: 38px;
@@ -103,6 +107,19 @@ const Nav = styled.nav`
     }
     .mainGnb li {
       position: relative;
+      margin: 4px 0;
+      &.tabMenu {
+        display: block;
+        margin-bottom: 25px;
+        img {
+          width: 60px;
+          height: 50px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
       p {
         display: none;
       }
@@ -164,7 +181,7 @@ const Nav = styled.nav`
     }
   }
   @media screen and (max-width: 768px) {
-   display: none; 
+    display: none;
   }
 `;
 
@@ -189,7 +206,7 @@ function Navigation() {
       </h1>
       <ul className="mainGnb">
         <li className="tabMenu tabImg">
-          <img src={`${path}/images/view_tablet`} alt="" />
+          <img src={`${path}/images/view_tablet.png`} alt="" />
         </li>
         <li>
           <img src={`${path}/images/menu01.png`} alt="" className="tabImg" />
