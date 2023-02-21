@@ -72,7 +72,7 @@ const DatePickerRouteInfo = () => {
       ". " +
       (day * 1 + 1) +
       ". " +
-      week[getWeek != 6 ? getWeek + 1 : 0];
+      week[getWeek !== 6 ? getWeek + 1 : 0];
 
     dispatch(inputToday(nowDay));
     dispatch(inputNxtday(nxtDay));

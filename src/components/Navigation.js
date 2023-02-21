@@ -91,6 +91,9 @@ const Nav = styled.nav`
       }
     }
   }
+  .tabIcon {
+    display: none;
+  }
   @media screen and (max-width: 1280px) {
     width: 60px;
     h1 {
