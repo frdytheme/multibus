@@ -18,6 +18,7 @@ const TicketingOption = styled.section`
   left: 50%;
   transform: translate(-50%, -48%);
   text-align: left;
+  z-index:99;
   & > div {
     display: flex;
     width: 100%;

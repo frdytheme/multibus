@@ -13,6 +13,7 @@ const BannerBox = styled.ul`
     width: 25%;
     padding: 25px 0 0 30px;
     text-align: left;
+    overflow: hidden;
     span {
       color: var(--blue-color);
       font-size: 13px;
@@ -84,7 +85,7 @@ const BannerBox = styled.ul`
       p {
         font-size: 16px;
         line-height: 1.2;
-        padding-top: 10px; 
+        padding-top: 10px;
       }
     }
   }
