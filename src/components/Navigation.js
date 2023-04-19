@@ -183,7 +183,7 @@ const Nav = styled.nav`
       }
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 812px) {
     display: none;
   }
 `;

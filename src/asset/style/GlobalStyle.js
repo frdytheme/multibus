@@ -7,6 +7,11 @@ const GlobalStyle = createGlobalStyle`
   --grey-box: #f3f4f6;
   --grey-border: 1px solid #f1f2f4;
 }
+
+body {
+  overflow-x: hidden;
+}
+
 `;
 
 export const focusBorder = css`

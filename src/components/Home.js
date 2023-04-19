@@ -79,7 +79,7 @@ const MainSection = styled.main`
       }
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 812px) {
     width: 100%;
     height: 339px;
     section {
@@ -186,7 +186,6 @@ function Home(props) {
         </li>
       </ul>
       <Ticketing />
-      <Banner />
     </MainSection>
   );
 }

@@ -16,6 +16,12 @@ const RouteInformation = styled.div`
   padding-left: 220px;
   box-sizing: border-box;
   border-left: 1px solid #ddd;
+  @media screen and (max-width: 1280px) {
+    padding-left: 60px;
+  }
+  @media screen and (max-width: 812px) {
+    padding-left: 0;
+  }
   .currentStatus {
     height: 180px;
     background: url(${path}/images/visual_route_bg.jpg) no-repeat 50% / cover;

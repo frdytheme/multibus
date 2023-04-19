@@ -5,19 +5,35 @@ import { path } from "../asset/DB/requestUrl";
 const FooterBox = styled.footer`
   background-color: #2e2d3d;
   width: calc(100% - 220px);
+  position: relative;
   @media screen and (max-width: 1280px) {
     width: calc(100% - 60px);
-    overflow: hidden;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 812px) {
     width: 100%;
+    height: auto;
+    div.sideBox {
+      position: static;
+      padding: 0;
+      .kobusIcon {
+        img {
+          width: 70px;
+          margin-right: 20px;
+        }
+      }
+      .otherSite {
+        width: 100%;
+        margin: 15px 0;
+        ul {
+          z-index: 999;
+        }
+      }
+    }
   }
   height: 150px;
   margin-left: auto;
   padding: 30px 20px;
   box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
   ul {
     li {
       font-size: 11px;
@@ -56,6 +72,11 @@ const FooterBox = styled.footer`
     }
   }
   .sideBox {
+    position: absolute;
+    padding: 0 20px;
+    bottom: 30px;
+    right: 0;
+    background-color: #2e2d3d;
     img {
       width: 100px;
       object-fit: cover;

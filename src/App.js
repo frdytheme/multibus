@@ -2,11 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import GlobalStyle from "./asset/style/GlobalStyle";
 import { useSelector } from "react-redux";
 import ConfirmModal from "./components/ConfirmModal";
-import Footer from "./components/Footer";
-import Home from "./components/Home";
-import Navigation from "./components/Navigation";
-import RouteInfo from "./components/RouteInfo";
 import TicketBox from "./components/TicketBox";
+import MainPage from "./components/MainPage";
+import RouteInfoPage from "./components/RouteInfoPage";
 
 function App() {
   const modalToggle = useSelector((state) => state.modalSwitch.ticketToggle);
@@ -16,12 +14,10 @@ function App() {
       <GlobalStyle />
       {modalToggle && <TicketBox />}
       {confirmToggle && <ConfirmModal />}
-      <Navigation />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/routeInfo" element={<RouteInfo />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/routeInfo" element={<RouteInfoPage />} />
       </Routes>
-      <Footer />
     </>
   );
 }
