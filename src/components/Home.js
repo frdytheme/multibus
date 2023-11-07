@@ -1,8 +1,54 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { path } from "../asset/DB/requestUrl";
-import Banner from "./Banner";
 import Ticketing from "./Ticketing";
+
+function Home(props) {
+  const subGnbRef = useRef(null);
+
+  const handleGnb = () => {
+    const btns = subGnbRef.current.querySelectorAll(".subBtn");
+    btns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        btns.forEach((btn) => btn.classList.remove("on"));
+        e.currentTarget.classList.add("on");
+      });
+    });
+  };
+
+  useEffect(() => {
+    handleGnb();
+  }, []);
+
+  return (
+    <MainSection>
+      <h1>즐거운 여행의 시작과 끝, 프리미엄 버스와 함께!</h1>
+      <ul className="subGnb" ref={subGnbRef}>
+        <li className="mobileBtn">
+          <div className="subBtn on"></div>
+          <p>고속버스예매</p>
+        </li>
+        <li className="mobileBtn">
+          <div className="subBtn"></div>
+          <p>예매확인</p>
+        </li>
+        <li className="mobileBtn">
+          <div className="subBtn"></div>
+          <p>도착시간안내</p>
+        </li>
+        <li>
+          <div className="subBtn"></div>
+          <p>프리패스</p>
+        </li>
+        <li>
+          <div className="subBtn"></div>
+          <p>휠체어사이트</p>
+        </li>
+      </ul>
+      <Ticketing />
+    </MainSection>
+  );
+}
 
 const MainSection = styled.main`
   background: url(${path}/images/main_bg.jpg) no-repeat 50% 0 / cover;
@@ -142,52 +188,5 @@ const MainSection = styled.main`
     }
   }
 `;
-
-function Home(props) {
-  const subGnbRef = useRef(null);
-
-  const handleGnb = () => {
-    const btns = subGnbRef.current.querySelectorAll(".subBtn");
-    btns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        btns.forEach((btn) => btn.classList.remove("on"));
-        e.currentTarget.classList.add("on");
-      });
-    });
-  };
-
-  useEffect(() => {
-    handleGnb();
-  }, []);
-
-  return (
-    <MainSection>
-      <h1>즐거운 여행의 시작과 끝, 프리미엄 버스와 함께!</h1>
-      <ul className="subGnb" ref={subGnbRef}>
-        <li className="mobileBtn">
-          <div className="subBtn on"></div>
-          <p>고속버스예매</p>
-        </li>
-        <li className="mobileBtn">
-          <div className="subBtn"></div>
-          <p>예매확인</p>
-        </li>
-        <li className="mobileBtn">
-          <div className="subBtn"></div>
-          <p>도착시간안내</p>
-        </li>
-        <li>
-          <div className="subBtn"></div>
-          <p>프리패스</p>
-        </li>
-        <li>
-          <div className="subBtn"></div>
-          <p>휠체어사이트</p>
-        </li>
-      </ul>
-      <Ticketing />
-    </MainSection>
-  );
-}
 
 export default Home;

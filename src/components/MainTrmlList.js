@@ -4,33 +4,6 @@ import { allDepTrmlList } from "../asset/DB/allDepTrmlList";
 import { setTrml } from "../store/departTrmlSlice";
 import { fetchRoute } from "../store/fetchRouteSlice";
 
-const MainTrml = styled.li`
-  border-top: 1px solid #aaa;
-  padding-top: 20px;
-  p {
-    margin-bottom: 5px;
-    text-indent: 12px;
-  }
-  ul {
-    padding: 0 8px;
-    &::after {
-      content: "";
-      display: block;
-      clear: both;
-    }
-    li {
-      float: left;
-      padding: 0 10px;
-      margin: 3px 3px;
-      border: 1px solid #e6e6e6;
-      height: 35px;
-      line-height: 35px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-  }
-`;
-
 function MainTrmlList() {
   const dispatch = useDispatch();
   const depDate = useSelector((state) => state.getDate.depDate);
@@ -63,7 +36,8 @@ function MainTrmlList() {
               onClick={() => {
                 dispatch(setTrml(trml));
                 dispatch(fetchRoute({ dep: trml.terminalId, date: depDate }));
-              }}>
+              }}
+            >
               {trml.terminalNm}
             </li>
           );
@@ -72,5 +46,32 @@ function MainTrmlList() {
     </MainTrml>
   );
 }
+
+const MainTrml = styled.li`
+  border-top: 1px solid #aaa;
+  padding-top: 20px;
+  p {
+    margin-bottom: 5px;
+    text-indent: 12px;
+  }
+  ul {
+    padding: 0 8px;
+    &::after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+    li {
+      float: left;
+      padding: 0 10px;
+      margin: 3px 3px;
+      border: 1px solid #e6e6e6;
+      height: 35px;
+      line-height: 35px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+`;
 
 export default MainTrmlList;

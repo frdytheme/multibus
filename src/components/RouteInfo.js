@@ -10,6 +10,282 @@ import { initTrml } from "../store/departTrmlSlice";
 import { setGrade } from "../store/getGradeSlice";
 import DatePickerRouteInfo from "../asset/DB/DatePickerRouteInfo";
 
+function RouteInfo() {
+  const dispatch = useDispatch();
+  const [sideShow, setSideShow] = useState(false);
+  const getDate = useSelector((state) => state.getDate);
+  const showToday = getDate.showToday;
+  const depDate = getDate.depDate;
+  const currentTime = getDate.currentDepTime;
+  const depTrml = useSelector((state) => state.depTrml);
+  const arrTrml = useSelector((state) => state.arrTrml);
+  const depId = depTrml.data.terminalId;
+  const arrId = arrTrml.data.terminalId;
+  const expRoute = useSelector((state) => state.expRoute);
+  const routeRes = expRoute.data;
+  const routeStatus = expRoute.status;
+  const busGrade = useSelector((state) => state.getGrade.data);
+
+  const currentToday = today;
+
+  const handleSideMenu = () => {
+    setSideShow(!sideShow);
+  };
+
+  // 전체 도착지 리스트에서 선택한 도착지,버스 등급으로 필터링
+  // 밤 12시 ~ 새벽에 이틀 뒤를 검색하면 API가 undefined 반환 오류 방지
+  let filterTrml = [];
+  if (routeRes === undefined) {
+  } else {
+    filterTrml = routeRes.filter((route) => {
+      return (
+        route.arrPlaceNm === arrTrml.data.terminalNm &&
+        route.gradeNm.includes(busGrade)
+      );
+    });
+  }
+
+  // 출발 시간이 밤 12시 이후면 리스트 끝으로 이동.
+  const alignTrml = [
+    ...filterTrml.filter((time) => {
+      return time.arrPlandTime > `${depDate}0500` * 1;
+    }),
+    ...filterTrml.filter((time) => {
+      return time.arrPlandTime < `${depDate}0500` * 1;
+    }),
+  ];
+
+  // 소요 시간 / 이동 거리 계산
+  let roadDistance = 0;
+  const getRoadTime = () => {
+    if (alignTrml.length === 0) return;
+    const depHour = alignTrml[0].depPlandTime.toString().slice(8, 10);
+    const depMin = alignTrml[0].depPlandTime.toString().slice(10, 12);
+    const arrHour = alignTrml[0].arrPlandTime.toString().slice(8, 10);
+    const arrMin = alignTrml[0].arrPlandTime.toString().slice(10, 12);
+    const hour =
+      arrHour === "00" ||
+      arrHour === "01" ||
+      arrHour === "02" ||
+      arrHour === "03"
+        ? arrHour * 1 + 24 - depHour
+        : arrHour - depHour;
+    const min = arrMin - depMin;
+    roadDistance = `약 ${90 * hour}km`;
+    return `${hour}시간 ${min < 0 ? min * -1 : min}분 소요`;
+  };
+
+  // 총 리스트에서 좌석 등급만 중복 제거 후 return
+  const gradeList = alignTrml.filter((trml, idx, route) => {
+    return route.findIndex((item) => item.gradeNm === trml.gradeNm) === idx;
+  });
+
+  // 시간표기 변경 (ex. 0000 -> 00 : 00)
+  const changeTime = (time) => {
+    const isTime = time.toString().slice(8, 12);
+    let isHour = isTime.slice(0, 2);
+    const isMin = isTime.slice(2, 4);
+    return isHour + ":" + isMin;
+  };
+
+  // 가격 표기 변경 (ex 11000 -> 11,000 원)
+  const changeCharge = (charge) => {
+    return charge.toLocaleString() + " 원";
+  };
+
+  const timeTable = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
+
+  // datePick, grade 변경 시 터미널 리스트 재출력
+  useEffect(() => {
+    dispatch(fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 }));
+  }, [depDate, busGrade, depId, arrId, dispatch]);
+
+  return (
+    <RouteInformation>
+      <div className="currentStatus">
+        <h2>고속버스예매</h2>
+        <ul className="statusStep">
+          <li className="on">예매정보입력</li>
+          <li className="spreadArrow on">
+            <img src={`${path}/images/arrow_process.png`} alt="화살표 아이콘" />
+          </li>
+          <li>결제정보입력</li>
+          <li className="spreadArrow">
+            <img src={`${path}/images/arrow_process.png`} alt="화살표 아이콘" />
+          </li>
+          <li>예매완료</li>
+        </ul>
+      </div>
+      <ul className="sideMenu">
+        <li>HOME</li>
+        <li
+          className={`${sideShow && "show"}`}
+          onClick={() => handleSideMenu()}
+        >
+          고속버스예매
+          {sideShow ? (
+            <img src={`${path}/images/bu_selectArrowC.png`} alt="아래 화살표" />
+          ) : (
+            <img src={`${path}/images/bu_selectArrow.png`} alt="아래 화살표" />
+          )}
+          <ul>
+            <li>고속버스예매</li>
+            <li>예매확인</li>
+            <li>운행정보</li>
+            <li>고속버스 프리패스/정기권</li>
+            <li>이용안내</li>
+            <li>공지사항</li>
+            <li>고객센터</li>
+            <li>전국고속버스운송사업조합</li>
+            <li>터미널사업자협회</li>
+          </ul>
+        </li>
+      </ul>
+      <article>
+        <h2>배차조회</h2>
+        <div className="routeStatus">
+          <div className="routeInfo">
+            <span className="dateInfo">{showToday}</span>
+            <div className="depArrInfo">
+              <p>{depTrml.name}</p>
+              <p>{arrTrml.name}</p>
+              <em>{routeStatus === "failed" || getRoadTime()}</em>
+              <em>{roadDistance}</em>
+              <Link
+                to="/"
+                onClick={() => {
+                  dispatch(initArrTrml());
+                  dispatch(initTrml());
+                  dispatch(inputDepDate(today));
+                  dispatch(inputToday(nowDay));
+                }}
+              >
+                수정
+              </Link>
+            </div>
+            <ul className="chargeInfo">
+              <li>
+                요금정보 <span>(일반요금)</span>
+              </li>
+              {gradeList.map((grade, idx) => {
+                return (
+                  <li key={idx}>
+                    {grade.gradeNm}
+                    <strong>{changeCharge(grade.charge)}</strong>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div className="routeChoice">
+            <div className="handler">
+              <div className="datePicker">
+                <div className="refreshBtn">
+                  <img
+                    src={`${path}/images/ico_refresh_s.png`}
+                    alt="새로고침 아이콘"
+                  />
+                </div>
+                <p>{showToday}</p>
+                <div className="picker">
+                  <DatePickerRouteInfo />
+                </div>
+              </div>
+            </div>
+            <div className="routeDisplay">
+              <ul className="timeTable">
+                {timeTable.map((time) => {
+                  return (
+                    <li
+                      key={time}
+                      className={time < currentHour ? "disabled" : undefined}
+                    >
+                      {time}
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="routeList">
+                <ul className="category">
+                  <li>출발</li>
+                  <li>고속사</li>
+                  <li>등급</li>
+                  <li>할인</li>
+                  <li>잔여석</li>
+                </ul>
+                <ul className="routeItem">
+                  <li>
+                    {routeStatus !== "failed" && alignTrml.length !== 0 ? (
+                      alignTrml.map((route, idx) => {
+                        const { depPlandTime, gradeNm } = route;
+                        const ranNum = Math.trunc(Math.random() * 7 + 1);
+                        return (
+                          <ul
+                            key={idx}
+                            className={
+                              depPlandTime < currentTime &&
+                              depDate === currentToday &&
+                              depPlandTime.toString().slice(8, 10) !== "00"
+                                ? `disabled`
+                                : null
+                            }
+                          >
+                            <li>{changeTime(depPlandTime)}</li>
+                            <li>
+                              <img
+                                src={`${path}/images/bus_company${ranNum}.png`}
+                                alt="고속사"
+                              />
+                            </li>
+                            <li
+                              className={`${
+                                gradeNm.includes("프리미엄") && "premium"
+                              }`}
+                            >
+                              {gradeNm}
+                            </li>
+                            <li></li>
+                            <li>36석</li>
+                            <li className="submitRoute">선택</li>
+                          </ul>
+                        );
+                      })
+                    ) : alignTrml.length === 0 && busGrade ? (
+                      <ul className="fetchFailed">
+                        <li>
+                          해당 좌석의 도착 정보를 찾을 수 없습니다.
+                          <span>좌석을 전체로 변경 후 다시 검색해주세요.</span>
+                          <div
+                            onClick={() => {
+                              dispatch(setGrade(0));
+                            }}
+                          >
+                            변경하시겠습니까?
+                          </div>
+                        </li>
+                      </ul>
+                    ) : (
+                      <ul className="fetchFailed">
+                        <li>
+                          도착 정보를 찾을 수 없습니다.
+                          <span>
+                            오늘 날짜부터 2일까지 검색 가능합니다.
+                            <br /> 다시 검색해주세요.
+                          </span>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </RouteInformation>
+  );
+}
+
 const RouteInformation = styled.div`
   width: 100%;
   background-color: #ddd;
@@ -276,11 +552,13 @@ const RouteInformation = styled.div`
               &:first-child::before,
               &:nth-child(2)::before,
               &:nth-child(3)::before {
-                background: url(${path}/images/ico_night.png) no-repeat 50% / cover;
+                background: url(${path}/images/ico_night.png) no-repeat 50% /
+                  cover;
               }
               &::before {
                 content: "";
-                background: url(${path}/images/ico_daytime.png) no-repeat 50% / cover;
+                background: url(${path}/images/ico_daytime.png) no-repeat 50% /
+                  cover;
                 display: block;
                 width: 16px;
                 height: 16px;
@@ -398,255 +676,5 @@ const RouteInformation = styled.div`
     }
   }
 `;
-
-function RouteInfo() {
-  const dispatch = useDispatch();
-  const [sideShow, setSideShow] = useState(false);
-  const getDate = useSelector((state) => state.getDate);
-  const showToday = getDate.showToday;
-  const depDate = getDate.depDate;
-  const currentTime = getDate.currentDepTime;
-  const depTrml = useSelector((state) => state.depTrml);
-  const arrTrml = useSelector((state) => state.arrTrml);
-  const depId = depTrml.data.terminalId;
-  const arrId = arrTrml.data.terminalId;
-  const expRoute = useSelector((state) => state.expRoute);
-  const routeRes = expRoute.data;
-  const routeStatus = expRoute.status;
-  const busGrade = useSelector((state) => state.getGrade.data);
-
-  const currentToday = today;
-
-  const handleSideMenu = () => {
-    setSideShow(!sideShow);
-  };
-
-  // 전체 도착지 리스트에서 선택한 도착지,버스 등급으로 필터링
-  // 밤 12시 ~ 새벽에 이틀 뒤를 검색하면 API가 undefined 반환 오류 방지
-  let filterTrml = [];
-  if (routeRes === undefined) {
-  } else {
-    filterTrml = routeRes.filter((route) => {
-      return route.arrPlaceNm === arrTrml.data.terminalNm && route.gradeNm.includes(busGrade);
-    });
-  }
-
-  // 출발 시간이 밤 12시 이후면 리스트 끝으로 이동.
-  const alignTrml = [
-    ...filterTrml
-    .filter((time) => {
-      return time.arrPlandTime > `${depDate}0500` * 1;
-    }),
-    ...filterTrml.filter((time) => {
-      return time.arrPlandTime < `${depDate}0500` * 1;
-    }),
-  ];
-
-  // 소요 시간 / 이동 거리 계산
-  let roadDistance = 0;
-  const getRoadTime = () => {
-    if (alignTrml.length === 0) return;
-    const depHour = alignTrml[0].depPlandTime.toString().slice(8, 10);
-    const depMin = alignTrml[0].depPlandTime.toString().slice(10, 12);
-    const arrHour = alignTrml[0].arrPlandTime.toString().slice(8, 10);
-    const arrMin = alignTrml[0].arrPlandTime.toString().slice(10, 12);
-    const hour =
-      arrHour === "00" || arrHour === "01" || arrHour === "02" || arrHour === "03"
-        ? arrHour * 1 + 24 - depHour
-        : arrHour - depHour;
-    const min = arrMin - depMin;
-    roadDistance = `약 ${90 * hour}km`;
-    return `${hour}시간 ${min < 0 ? min * -1 : min}분 소요`;
-  };
-
-  // 총 리스트에서 좌석 등급만 중복 제거 후 return
-  const gradeList = alignTrml.filter((trml, idx, route) => {
-    return route.findIndex((item) => item.gradeNm === trml.gradeNm) === idx;
-  });
-
-  // 시간표기 변경 (ex. 0000 -> 00 : 00)
-  const changeTime = (time) => {
-    const isTime = time.toString().slice(8, 12);
-    let isHour = isTime.slice(0, 2);
-    const isMin = isTime.slice(2, 4);
-    return isHour + ":" + isMin;
-  };
-
-  // 가격 표기 변경 (ex 11000 -> 11,000 원)
-  const changeCharge = (charge) => {
-    return charge.toLocaleString() + " 원";
-  };
-
-  const timeTable = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
-
-  // datePick, grade 변경 시 터미널 리스트 재출력
-  useEffect(() => {
-    dispatch(fetchRoute({ dep: depId, arr: arrId, date: depDate, list: 1000 }));
-  }, [depDate, busGrade]);
-
-  return (
-    <RouteInformation>
-      <div className="currentStatus">
-        <h2>고속버스예매</h2>
-        <ul className="statusStep">
-          <li className="on">예매정보입력</li>
-          <li className="spreadArrow on">
-            <img src={`${path}/images/arrow_process.png`} alt="화살표 아이콘" />
-          </li>
-          <li>결제정보입력</li>
-          <li className="spreadArrow">
-            <img src={`${path}/images/arrow_process.png`} alt="화살표 아이콘" />
-          </li>
-          <li>예매완료</li>
-        </ul>
-      </div>
-      <ul className="sideMenu">
-        <li>HOME</li>
-        <li className={`${sideShow && "show"}`} onClick={() => handleSideMenu()}>
-          고속버스예매
-          {sideShow ? (
-            <img src={`${path}/images/bu_selectArrowC.png`} alt="아래 화살표" />
-          ) : (
-            <img src={`${path}/images/bu_selectArrow.png`} alt="아래 화살표" />
-          )}
-          <ul>
-            <li>고속버스예매</li>
-            <li>예매확인</li>
-            <li>운행정보</li>
-            <li>고속버스 프리패스/정기권</li>
-            <li>이용안내</li>
-            <li>공지사항</li>
-            <li>고객센터</li>
-            <li>전국고속버스운송사업조합</li>
-            <li>터미널사업자협회</li>
-          </ul>
-        </li>
-      </ul>
-      <article>
-        <h2>배차조회</h2>
-        <div className="routeStatus">
-          <div className="routeInfo">
-            <span className="dateInfo">{showToday}</span>
-            <div className="depArrInfo">
-              <p>{depTrml.name}</p>
-              <p>{arrTrml.name}</p>
-              <em>{routeStatus === "failed" || getRoadTime()}</em>
-              <em>{roadDistance}</em>
-              <Link
-                to="/"
-                onClick={() => {
-                  dispatch(initArrTrml());
-                  dispatch(initTrml());
-                  dispatch(inputDepDate(today));
-                  dispatch(inputToday(nowDay));
-                }}>
-                수정
-              </Link>
-            </div>
-            <ul className="chargeInfo">
-              <li>
-                요금정보 <span>(일반요금)</span>
-              </li>
-              {gradeList.map((grade, idx) => {
-                return (
-                  <li key={idx}>
-                    {grade.gradeNm}
-                    <strong>{changeCharge(grade.charge)}</strong>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <div className="routeChoice">
-            <div className="handler">
-              <div className="datePicker">
-                <div className="refreshBtn">
-                  <img src={`${path}/images/ico_refresh_s.png`} alt="새로고침 아이콘" />
-                </div>
-                <p>{showToday}</p>
-                <div className="picker">
-                  <DatePickerRouteInfo />
-                </div>
-              </div>
-            </div>
-            <div className="routeDisplay">
-              <ul className="timeTable">
-                {timeTable.map((time) => {
-                  return (
-                    <li key={time} className={time < currentHour ? "disabled" : undefined}>
-                      {time}
-                    </li>
-                  );
-                })}
-              </ul>
-              <div className="routeList">
-                <ul className="category">
-                  <li>출발</li>
-                  <li>고속사</li>
-                  <li>등급</li>
-                  <li>할인</li>
-                  <li>잔여석</li>
-                </ul>
-                <ul className="routeItem">
-                  <li>
-                    {routeStatus !== "failed" && alignTrml.length !== 0 ? (
-                      alignTrml.map((route, idx) => {
-                        const { depPlandTime, gradeNm } = route;
-                        const ranNum = Math.trunc(Math.random() * 7 + 1);
-                        return (
-                          <ul
-                            key={idx}
-                            className={
-                              depPlandTime < currentTime &&
-                              depDate === currentToday &&
-                              depPlandTime.toString().slice(8, 10) !== "00"
-                                ? `disabled`
-                                : null
-                            }>
-                            <li>{changeTime(depPlandTime)}</li>
-                            <li>
-                              <img src={`${path}/images/bus_company${ranNum}.png`} alt="고속사" />
-                            </li>
-                            <li className={`${gradeNm.includes("프리미엄") && "premium"}`}>{gradeNm}</li>
-                            <li></li>
-                            <li>36석</li>
-                            <li className="submitRoute">선택</li>
-                          </ul>
-                        );
-                      })
-                    ) : alignTrml.length === 0 && busGrade ? (
-                      <ul className="fetchFailed">
-                        <li>
-                          해당 좌석의 도착 정보를 찾을 수 없습니다.
-                          <span>좌석을 전체로 변경 후 다시 검색해주세요.</span>
-                          <div
-                            onClick={() => {
-                              dispatch(setGrade(0));
-                            }}>
-                            변경하시겠습니까?
-                          </div>
-                        </li>
-                      </ul>
-                    ) : (
-                      <ul className="fetchFailed">
-                        <li>
-                          도착 정보를 찾을 수 없습니다.
-                          <span>
-                            오늘 날짜부터 2일까지 검색 가능합니다.
-                            <br /> 다시 검색해주세요.
-                          </span>
-                        </li>
-                      </ul>
-                    )}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-    </RouteInformation>
-  );
-}
 
 export default RouteInfo;

@@ -7,6 +7,36 @@ import SearchTrml from "./SearchTrml";
 import SetPlace from "./SetPlace";
 import TrmlList from "./TrmlList";
 
+function TicketBox() {
+  const dispatch = useDispatch();
+  const depTrml = useSelector((state) => state.depTrml.data);
+  const depState = useSelector((state) => state.depTrml.status);
+
+  return (
+    <TicketModal>
+      <div
+        className="bgBox"
+        onClick={() => {
+          dispatch(modalToggle());
+          dispatch(initTrml());
+        }}
+      >
+        반투명 배경
+      </div>
+      <div className="ticketBox">
+        <h2>출/도착지 선택</h2>
+        <ul className="ticketList">
+          <SetPlace />
+          <SearchTrml />
+          {depTrml ? null : <MainTrmlList />}
+          {depState ? <MainTrmlList /> : null}
+          <TrmlList />
+        </ul>
+      </div>
+    </TicketModal>
+  );
+}
+
 const TicketModal = styled.div`
   height: 100vh;
   width: 100%;
@@ -48,34 +78,5 @@ const TicketModal = styled.div`
     }
   }
 `;
-
-function TicketBox() {
-  const dispatch = useDispatch();
-  const depTrml = useSelector((state) => state.depTrml.data);
-  const depState = useSelector((state) => state.depTrml.status);
-  
-  return (
-    <TicketModal>
-      <div
-        className="bgBox"
-        onClick={() => {
-          dispatch(modalToggle());
-          dispatch(initTrml());
-        }}>
-        반투명 배경
-      </div>
-      <div className="ticketBox">
-        <h2>출/도착지 선택</h2>
-        <ul className="ticketList">
-          <SetPlace />
-          <SearchTrml />
-          {depTrml ? null : <MainTrmlList />}
-          {depState ? <MainTrmlList /> : null}
-          <TrmlList />
-        </ul>
-      </div>
-    </TicketModal>
-  );
-}
 
 export default TicketBox;

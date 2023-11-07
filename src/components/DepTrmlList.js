@@ -7,7 +7,7 @@ function DepallDepTrmlList() {
   const dispatch = useDispatch();
   const trmlNum = useSelector((state) => state.setTrmlNum.num);
   const depDate = useSelector((state) => state.getDate.depDate);
-
+  
   return (
     <ul>
       {trmlNum === "all"

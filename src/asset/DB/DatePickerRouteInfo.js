@@ -32,8 +32,8 @@ const DatePickerRouteInfo = () => {
   // 날짜 / 시간 변경 로직
   const setDateandTime = (now) => {
     const year = now.getFullYear();
-    const month = ("0" + (now.getMonth() + 1)).slice(0, 2);
-    const day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const day = now.getDate().toString().padStart(2, "0");
 
     // API호출 URL용 년월일 변수 ex. 20230214
     const today = `${year}${month}${day}`;
@@ -63,16 +63,11 @@ const DatePickerRouteInfo = () => {
     const week = ["일", "월", "화", "수", "목", "금", "토"];
 
     // 년.월.일.요일 변수
-    const nowDay =
-      year + ". " + month.slice(1, 2) + ". " + day + ". " + week[getWeek];
-    const nxtDay =
-      year +
-      ". " +
-      month.slice(1, 2) +
-      ". " +
-      (day * 1 + 1) +
-      ". " +
-      week[getWeek !== 6 ? getWeek + 1 : 0];
+    const nowDay = `${year}.${month}.${day}. ${week[getWeek]}`;
+    const nxtDay = `${year}.${month}.${new Date()
+      .getDate()
+      .toString()
+      .padStart(2, "0")}. ${week[getWeek + 1]}`;
 
     dispatch(inputToday(nowDay));
     dispatch(inputNxtday(nxtDay));

@@ -8,6 +8,105 @@ import { initArrTrml } from "../store/arrTrmlSlice";
 import { inputDepDate, inputToday } from "../store/getDateSlice";
 import { setGrade } from "../store/getGradeSlice";
 
+function Navigation() {
+  const dispatch = useDispatch();
+
+  return (
+    <Nav>
+      <h1>
+        <Link
+          to="/"
+          onClick={() => {
+            dispatch(initTrml());
+            dispatch(initArrTrml());
+            dispatch(inputToday(nowDay));
+            dispatch(inputDepDate(today));
+            dispatch(setGrade(0));
+          }}
+        >
+          <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
+          <span>고속버스통합예매</span>
+        </Link>
+      </h1>
+      <ul className="mainGnb">
+        <li className="tabMenu tabImg">
+          <img src={`${path}/images/view_tablet.png`} alt="" />
+        </li>
+        <li>
+          <img src={`${path}/images/menu01.png`} alt="" className="tabImg" />
+          <p>고속버스예매</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu02.png`} alt="" className="tabImg" />
+          <p>예매확인</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu03.png`} alt="" className="tabImg" />
+          <p>운행정보</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu04.png`} alt="" className="tabImg" />
+          <p>고속버스 프리패스/정기권</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu06.png`} alt="" className="tabImg" />
+          <p>이용안내</p>
+        </li>
+        <li>
+          <p>공지사항</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu09.png`} alt="" className="tabImg" />
+          <p>고객센터</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu07.png`} alt="" className="tabImg" />
+          <p>전국고속버스운송사업조합</p>
+        </li>
+        <li>
+          <img src={`${path}/images/menu08.png`} alt="" className="tabImg" />
+          <p>터미널사업자협회</p>
+        </li>
+      </ul>
+      <ul className="subBanner">
+        <li>
+          <span>
+            휠체어 좌석
+            <br />
+            예매 사이트
+          </span>
+          <p>
+            함께가요!
+            <br />
+            행복여행
+          </p>
+        </li>
+        <li>
+          <span>예매부터 탑승까지!</span>
+          <p>
+            고속버스
+            <br />
+            티머니
+          </p>
+        </li>
+        <li className="noticeSwipe">
+          <span>NOTICE</span>
+          <p>공지사항 SWIPE 리스트</p>
+          <em>2023.02.14</em>
+        </li>
+      </ul>
+      <div className="tabIcon">
+        <div>
+          <img src={`${path}/images/ico_app.png`} alt="" />
+        </div>
+        <div>
+          <img src={`${path}/images/ico_notice.png`} alt="" />
+        </div>
+      </div>
+    </Nav>
+  );
+}
+
 const Nav = styled.nav`
   width: 220px;
   height: 100vh;
@@ -187,103 +286,5 @@ const Nav = styled.nav`
     display: none;
   }
 `;
-
-function Navigation() {
-  const dispatch = useDispatch();
-
-  return (
-    <Nav>
-      <h1>
-        <Link
-          to="/"
-          onClick={() => {
-            dispatch(initTrml());
-            dispatch(initArrTrml());
-            dispatch(inputToday(nowDay));
-            dispatch(inputDepDate(today));
-            dispatch(setGrade(0));
-          }}>
-          <img src={`${path}/images/logo_pc.png`} alt="로고이미지" />
-          <span>고속버스통합예매</span>
-        </Link>
-      </h1>
-      <ul className="mainGnb">
-        <li className="tabMenu tabImg">
-          <img src={`${path}/images/view_tablet.png`} alt="" />
-        </li>
-        <li>
-          <img src={`${path}/images/menu01.png`} alt="" className="tabImg" />
-          <p>고속버스예매</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu02.png`} alt="" className="tabImg" />
-          <p>예매확인</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu03.png`} alt="" className="tabImg" />
-          <p>운행정보</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu04.png`} alt="" className="tabImg" />
-          <p>고속버스 프리패스/정기권</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu06.png`} alt="" className="tabImg" />
-          <p>이용안내</p>
-        </li>
-        <li>
-          <p>공지사항</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu09.png`} alt="" className="tabImg" />
-          <p>고객센터</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu07.png`} alt="" className="tabImg" />
-          <p>전국고속버스운송사업조합</p>
-        </li>
-        <li>
-          <img src={`${path}/images/menu08.png`} alt="" className="tabImg" />
-          <p>터미널사업자협회</p>
-        </li>
-      </ul>
-      <ul className="subBanner">
-        <li>
-          <span>
-            휠체어 좌석
-            <br />
-            예매 사이트
-          </span>
-          <p>
-            함께가요!
-            <br />
-            행복여행
-          </p>
-        </li>
-        <li>
-          <span>예매부터 탑승까지!</span>
-          <p>
-            고속버스
-            <br />
-            티머니
-          </p>
-        </li>
-        <li className="noticeSwipe">
-          <span>NOTICE</span>
-          <p>공지사항 SWIPE 리스트</p>
-          <em>2023.02.14</em>
-        </li>
-      </ul>
-      <div className="tabIcon">
-        <div>
-          <img src={`${path}/images/ico_app.png`} alt="" />
-        </div>
-        <div>
-          <img src={`${path}/images/ico_notice.png`} alt="" />
-        </div>
-      </div>
-    </Nav>
-  );
-}
 
 export default Navigation;

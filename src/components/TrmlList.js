@@ -6,6 +6,73 @@ import { setTrmlNum } from "../store/setTrmlByNumSlice";
 import ArrTrmlList from "./ArrTrmlList";
 import DepTrmlList from "./DepTrmlList";
 
+function TrmlList() {
+  const mainList = useRef(null);
+  const dispatch = useDispatch();
+  const depTrml = useSelector((state) => state.depTrml.data);
+  const fetchStatus = useSelector((state) => state.expRoute.status);
+
+  const province = [
+    { id: 0, name: "서울" },
+    { id: 1, name: "인천/경기" },
+    { id: 2, name: "강원" },
+    { id: 3, name: "대전/충남" },
+    { id: 4, name: "충북" },
+    { id: 5, name: "광주/전남" },
+    { id: 6, name: "전북" },
+    { id: 7, name: "부산/경남" },
+    { id: 8, name: "대구/경북" },
+  ];
+
+  const onMainTrml = () => {
+    const mainTrmls = mainList.current.querySelectorAll("li");
+    mainTrmls.forEach((trml) => {
+      trml.addEventListener("click", (e) => {
+        mainTrmls.forEach((trml) => trml.classList.remove("checked"));
+        e.currentTarget.classList.add("checked");
+      });
+    });
+  };
+
+  useEffect(() => {
+    onMainTrml();
+  }, []);
+
+  return (
+    <TrmlBoard>
+      <p>지역별 터미널</p>
+      <div className="areaList">
+        <div className="cityList">
+          <ul ref={mainList}>
+            <li className="checked" onClick={() => dispatch(setTrmlNum("all"))}>
+              전체
+            </li>
+            {province.map((province) => {
+              return (
+                <li
+                  key={province.id}
+                  id={province.id}
+                  onClick={(e) => dispatch(setTrmlNum(e.target.id))}
+                >
+                  {province.name}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="cityItem">
+          {depTrml ? <ArrTrmlList /> : <DepTrmlList />}
+        </div>
+      </div>
+      {depTrml && fetchStatus === "ready" && (
+        <div className="loading">
+          <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
+        </div>
+      )}
+    </TrmlBoard>
+  );
+}
+
 const TrmlBoard = styled.li`
   position: relative;
   p {
@@ -80,71 +147,5 @@ const TrmlBoard = styled.li`
     border-radius: 5px;
   }
 `;
-
-function TrmlList() {
-  const mainList = useRef(null);
-  const dispatch = useDispatch();
-  const depTrml = useSelector((state) => state.depTrml.data);
-  const fetchStatus = useSelector((state) => state.expRoute.status);
-
-  const province = [
-    { id: 0, name: "서울" },
-    { id: 1, name: "인천/경기" },
-    { id: 2, name: "강원" },
-    { id: 3, name: "대전/충남" },
-    { id: 4, name: "충북" },
-    { id: 5, name: "광주/전남" },
-    { id: 6, name: "전북" },
-    { id: 7, name: "부산/경남" },
-    { id: 8, name: "대구/경북" },
-  ];
-
-  const onMainTrml = () => {
-    const mainTrmls = mainList.current.querySelectorAll("li");
-    mainTrmls.forEach((trml) => {
-      trml.addEventListener("click", (e) => {
-        mainTrmls.forEach((trml) => trml.classList.remove("checked"));
-        e.currentTarget.classList.add("checked");
-      });
-    });
-  };
-
-  useEffect(() => {
-    onMainTrml();
-  }, []);
-
-  return (
-    <TrmlBoard>
-      <p>지역별 터미널</p>
-      <div className="areaList">
-        <div className="cityList">
-          <ul ref={mainList}>
-            <li className="checked" onClick={() => dispatch(setTrmlNum("all"))}>
-              전체
-            </li>
-            {province.map((province) => {
-              return (
-                <li
-                  key={province.id}
-                  id={province.id}
-                  onClick={(e) => dispatch(setTrmlNum(e.target.id))}>
-                  {province.name}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className="cityItem">
-          {depTrml ? <ArrTrmlList /> : <DepTrmlList />}
-        </div>
-      </div>
-      {depTrml && fetchStatus === "ready" && (
-        <div className="loading">
-          <img src={`${path}/images/loading.gif`} alt="로딩 gif" />
-        </div>
-      )}
-    </TrmlBoard>
-  );
-}
 
 export default TrmlList;

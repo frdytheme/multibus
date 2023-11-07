@@ -4,6 +4,29 @@ import { path } from "../asset/DB/requestUrl";
 import { focusBorder } from "../asset/style/GlobalStyle";
 import { setTrml } from "../store/departTrmlSlice";
 
+function SetPlace() {
+  const dispatch = useDispatch();
+
+  const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
+  const depStatus = useSelector((state) => state.depTrml.status);
+  const arrTrml = useSelector((state) => state.arrTrml.data.terminalNm);
+
+  return (
+    <SetTrml>
+      <p
+        className={`${depTrml || "focus"} ${depStatus && "change"}`}
+        onClick={() => dispatch(setTrml(""))}
+      >
+        출발지<span>{depTrml}</span>
+      </p>
+      <div className="arrow">화살표</div>
+      <p className={`${depStatus || (depTrml && "focus")}`}>
+        도착지<span>{arrTrml ? arrTrml : "선택"}</span>
+      </p>
+    </SetTrml>
+  );
+}
+
 const SetTrml = styled.li`
   display: flex;
   position: relative;
@@ -62,27 +85,5 @@ const SetTrml = styled.li`
     }
   }
 `;
-
-function SetPlace() {
-  const dispatch = useDispatch();
-
-  const depTrml = useSelector((state) => state.depTrml.data.terminalNm);
-  const depStatus = useSelector((state) => state.depTrml.status);
-  const arrTrml = useSelector((state) => state.arrTrml.data.terminalNm);
-
-  return (
-    <SetTrml>
-      <p
-        className={`${depTrml || "focus"} ${depStatus && "change"}`}
-        onClick={() => dispatch(setTrml(""))}>
-        출발지<span>{depTrml}</span>
-      </p>
-      <div className="arrow">화살표</div>
-      <p className={`${depStatus || (depTrml && "focus")}`}>
-        도착지<span>{arrTrml ? arrTrml : "선택"}</span>
-      </p>
-    </SetTrml>
-  );
-}
 
 export default SetPlace;

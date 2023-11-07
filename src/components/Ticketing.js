@@ -9,6 +9,177 @@ import DatePickerCustom from "../asset/DB/DatePickerCustom";
 import { setGrade } from "../store/getGradeSlice";
 import { inputDepDate, inputToday } from "../store/getDateSlice";
 
+function Ticketing() {
+  const dispatch = useDispatch();
+  const depTrml = useSelector((state) => state.depTrml.data);
+  const arrTrml = useSelector((state) => state.arrTrml.data);
+  const depTrmlNm = depTrml.terminalNm;
+  const arrTrmlNm = arrTrml.terminalNm;
+
+  const showToday = useSelector((state) => state.getDate.showToday);
+  const [dateChk, setDateChk] = useState(false);
+  const gradeRef = useRef(null);
+
+  // 버스 등급 체크 classList 라디오버튼 로직
+  const handleGradeChk = () => {
+    const lis = gradeRef.current.querySelectorAll("li");
+    lis.forEach((li) => {
+      li.addEventListener("click", (e) => {
+        lis.forEach((li) => {
+          li.classList.remove("checked");
+          e.currentTarget.classList.add("checked");
+        });
+      });
+    });
+  };
+
+  // 조회하기 클릭 시 알림창
+  const confirmAlert = () => {
+    alert(
+      "당일출발차량의 경우 예매 후 당일취소를 하셔도 취소위약금이 청구되오니 유의 바랍니다."
+    );
+    dispatch(confirmToggle());
+  };
+
+  // 출도착지 반전 함수.
+  const changePlace = () => {
+    const currentArr = { ...depTrml };
+    dispatch(setTrml(arrTrmlNm));
+    dispatch(changeArrDep(currentArr));
+  };
+
+  useEffect(() => {
+    handleGradeChk();
+  }, []);
+
+  return (
+    <>
+      <TicketingOption>
+        <div>
+          <p className="on">
+            편도
+            <span className="directWay">
+              <span className="checked">직통</span>
+              <span>환승</span>
+            </span>
+          </p>
+          <p>왕복</p>
+        </div>
+        <ul className="ticketBox">
+          <li className="choicePlace">
+            <p
+              onClick={() => {
+                dispatch(modalToggle());
+                dispatch(initArrTrml());
+                dispatch(initTrml());
+              }}
+            >
+              출발지
+              <span style={depTrmlNm && { color: "#000" }}>
+                {depTrmlNm ? depTrmlNm : "선택"}
+              </span>
+            </p>
+            <div
+              className="toggleIcon"
+              onClick={() => {
+                changePlace();
+              }}
+            ></div>
+            <p
+              onClick={() => {
+                dispatch(modalToggle());
+              }}
+            >
+              도착지
+              <span style={depTrmlNm && { color: "#000" }}>
+                {arrTrmlNm ? arrTrmlNm : "선택"}
+              </span>
+            </p>
+          </li>
+          <li className="dateBox">
+            <div className="dateTxt">
+              <p>가는날</p>
+              <span>{showToday}</span>
+            </div>
+            <div className="dateChoice">
+              <span
+                className={`${dateChk || "checked"}`}
+                onClick={() => {
+                  setDateChk(false);
+                  dispatch(inputToday(nowDay));
+                  dispatch(inputDepDate(today));
+                }}
+              >
+                오늘
+              </span>
+              <span
+                className={`${dateChk && "checked"}`}
+                onClick={() => {
+                  setDateChk(true);
+                  dispatch(inputDepDate(tommorrow));
+                  dispatch(inputToday(nxtDay));
+                  console.log(tommorrow, nxtDay)
+                }}
+              >
+                내일
+              </span>
+              <DatePickerCustom />
+            </div>
+          </li>
+          <li>
+            <p>등급</p>
+            <ul className="seatGrade" ref={gradeRef}>
+              <li
+                className="checked"
+                onClick={() => {
+                  dispatch(setGrade(0));
+                }}
+              >
+                전체
+              </li>
+              <li
+                onClick={() => {
+                  dispatch(setGrade(7));
+                }}
+              >
+                프리미엄
+              </li>
+              <li
+                onClick={() => {
+                  dispatch(setGrade(1));
+                }}
+              >
+                우등
+              </li>
+              <li
+                onClick={() => {
+                  dispatch(setGrade(5));
+                }}
+              >
+                일반
+              </li>
+            </ul>
+          </li>
+          <li>
+            <button
+              className={`${depTrmlNm && arrTrmlNm && "full"}`}
+              onClick={() => {
+                if (depTrmlNm && arrTrmlNm) {
+                  confirmAlert();
+                } else {
+                  alert("출발지와 도착지를 선택해주세요.");
+                }
+              }}
+            >
+              조회하기
+            </button>
+          </li>
+        </ul>
+      </TicketingOption>
+    </>
+  );
+}
+
 const TicketingOption = styled.section`
   width: 750px;
   height: 300px;
@@ -18,7 +189,7 @@ const TicketingOption = styled.section`
   left: 50%;
   transform: translate(-50%, -48%);
   text-align: left;
-  z-index:1;
+  z-index: 1;
   & > div {
     display: flex;
     width: 100%;
@@ -38,7 +209,8 @@ const TicketingOption = styled.section`
       &:first-child {
         &::after {
           content: "";
-          background: url(${path}/images/ico_oneway.png) no-repeat center / cover;
+          background: url(${path}/images/ico_oneway.png) no-repeat center /
+            cover;
           display: block;
           width: 19px;
           height: 10px;
@@ -51,7 +223,8 @@ const TicketingOption = styled.section`
       &:nth-child(2) {
         &::after {
           content: "";
-          background: url(${path}/images/ico_roundtrip.png) no-repeat center / cover;
+          background: url(${path}/images/ico_roundtrip.png) no-repeat center /
+            cover;
           display: block;
           width: 19px;
           height: 19px;
@@ -66,17 +239,20 @@ const TicketingOption = styled.section`
         color: var(--blue-color);
         &:first-child {
           &::after {
-            background: url(${path}/images/ico_oneway_on.png) no-repeat center / cover;
+            background: url(${path}/images/ico_oneway_on.png) no-repeat center /
+              cover;
           }
         }
         &:nth-child(2) {
           &::after {
-            background: url(${path}/images/ico_roundtrip_on.png) no-repeat center / cover;
+            background: url(${path}/images/ico_roundtrip_on.png) no-repeat
+              center / cover;
           }
         }
         &::before {
           content: "";
-          background: url(${path}/images/ico_tab_s_on.png) no-repeat center / cover;
+          background: url(${path}/images/ico_tab_s_on.png) no-repeat center /
+            cover;
           display: block;
           width: 12px;
           height: 11px;
@@ -172,7 +348,8 @@ const TicketingOption = styled.section`
             height: 100%;
           }
           &:hover::after {
-            background: url(${path}/images/arrow_toggle_s.png) no-repeat center bottom / cover;
+            background: url(${path}/images/arrow_toggle_s.png) no-repeat center
+              bottom / cover;
           }
         }
       }
@@ -201,7 +378,8 @@ const TicketingOption = styled.section`
           &:nth-child(2) {
             color: #e9a410;
             width: 85px;
-            background: url(${path}/images/ico_grade1_s.png) no-repeat 65px center;
+            background: url(${path}/images/ico_grade1_s.png) no-repeat 65px
+              center;
             &.checked::after {
               content: url(${path}/images/ico_gradeY_s_on.png);
             }
@@ -214,7 +392,8 @@ const TicketingOption = styled.section`
             &:hover,
             &.checked {
               color: #d29400;
-              background: url(${path}/images/ico_grade1_s_on.png) no-repeat 65px center;
+              background: url(${path}/images/ico_grade1_s_on.png) no-repeat 65px
+                center;
               &::before {
                 content: url(${path}/images/ico_premium_s_on.png);
               }
@@ -222,19 +401,23 @@ const TicketingOption = styled.section`
           }
           &:nth-child(3) {
             width: 53px;
-            background: url(${path}/images/ico_grade2_s.png) no-repeat 35px center;
+            background: url(${path}/images/ico_grade2_s.png) no-repeat 35px
+              center;
             &:hover,
             &.checked {
-              background: url(${path}/images/ico_grade2_s_on.png) no-repeat 35px center;
+              background: url(${path}/images/ico_grade2_s_on.png) no-repeat 35px
+                center;
               color: #000;
             }
           }
           &:nth-child(4) {
             width: 53px;
-            background: url(${path}/images/ico_grade3_s.png) no-repeat 35px center;
+            background: url(${path}/images/ico_grade3_s.png) no-repeat 35px
+              center;
             &:hover,
             &.checked {
-              background: url(${path}/images/ico_grade3_s_on.png) no-repeat 35px center;
+              background: url(${path}/images/ico_grade3_s_on.png) no-repeat 35px
+                center;
               color: #000;
             }
           }
@@ -320,160 +503,5 @@ const TicketingOption = styled.section`
     }
   }
 `;
-
-function Ticketing() {
-  const dispatch = useDispatch();
-  const depTrml = useSelector((state) => state.depTrml.data);
-  const arrTrml = useSelector((state) => state.arrTrml.data);
-  const depTrmlNm = depTrml.terminalNm;
-  const arrTrmlNm = arrTrml.terminalNm;
-
-  const showToday = useSelector((state) => state.getDate.showToday);
-  const [dateChk, setDateChk] = useState(false);
-  const gradeRef = useRef(null);
-
-  // 버스 등급 체크 classList 라디오버튼 로직
-  const handleGradeChk = () => {
-    const lis = gradeRef.current.querySelectorAll("li");
-    lis.forEach((li) => {
-      li.addEventListener("click", (e) => {
-        lis.forEach((li) => {
-          li.classList.remove("checked");
-          e.currentTarget.classList.add("checked");
-        });
-      });
-    });
-  };
-
-  // 조회하기 클릭 시 알림창
-  const confirmAlert = () => {
-    alert("당일출발차량의 경우 예매 후 당일취소를 하셔도 취소위약금이 청구되오니 유의 바랍니다.");
-    dispatch(confirmToggle());
-  };
-
-
-  // 출도착지 반전 함수.
-  const changePlace = () => {
-    const currentArr = { ...depTrml };
-    dispatch(setTrml(arrTrmlNm));
-    dispatch(changeArrDep(currentArr));
-  };
-
-  useEffect(() => {
-    handleGradeChk();
-  }, []);
-
-  return (
-    <>
-      <TicketingOption>
-        <div>
-          <p className="on">
-            편도
-            <span className="directWay">
-              <span className="checked">직통</span>
-              <span>환승</span>
-            </span>
-          </p>
-          <p>왕복</p>
-        </div>
-        <ul className="ticketBox">
-          <li className="choicePlace">
-            <p
-              onClick={() => {
-                dispatch(modalToggle());
-                dispatch(initArrTrml());
-                dispatch(initTrml());
-              }}>
-              출발지
-              <span style={depTrmlNm && { color: "#000" }}>{depTrmlNm ? depTrmlNm : "선택"}</span>
-            </p>
-            <div
-              className="toggleIcon"
-              onClick={() => {
-                changePlace();
-              }}></div>
-            <p
-              onClick={() => {
-                dispatch(modalToggle());
-              }}>
-              도착지
-              <span style={depTrmlNm && { color: "#000" }}>{arrTrmlNm ? arrTrmlNm : "선택"}</span>
-            </p>
-          </li>
-          <li className="dateBox">
-            <div className="dateTxt">
-              <p>가는날</p>
-              <span>{showToday}</span>
-            </div>
-            <div className="dateChoice">
-              <span
-                className={`${dateChk || "checked"}`}
-                onClick={() => {
-                  setDateChk(false);
-                  dispatch(inputToday(nowDay))
-                  dispatch(inputDepDate(today))
-                }}>
-                오늘
-              </span>
-              <span
-                className={`${dateChk && "checked"}`}
-                onClick={() => {
-                  setDateChk(true);
-                  dispatch(inputDepDate(tommorrow))
-                  dispatch(inputToday(nxtDay))
-                }}>
-                내일
-              </span>
-              <DatePickerCustom />
-            </div>
-          </li>
-          <li>
-            <p>등급</p>
-            <ul className="seatGrade" ref={gradeRef}>
-              <li
-                className="checked"
-                onClick={() => {
-                  dispatch(setGrade(0));
-                }}>
-                전체
-              </li>
-              <li
-                onClick={() => {
-                  dispatch(setGrade(7));
-                }}>
-                프리미엄
-              </li>
-              <li
-                onClick={() => {
-                  dispatch(setGrade(1));
-                }}>
-                우등
-              </li>
-              <li
-                onClick={() => {
-                  dispatch(setGrade(5));
-                }}>
-                일반
-              </li>
-            </ul>
-          </li>
-          <li>
-            <button
-              className={`${depTrmlNm && arrTrmlNm && "full"}`}
-              onClick={() => {
-                if (depTrmlNm && arrTrmlNm) {
-                  confirmAlert();
-                } else {
-                  alert("출발지와 도착지를 선택해주세요.");
-                }
-              }}>
-              조회하기
-            </button>
-          </li>
-        </ul>
-      </TicketingOption>
-    </>
-  );
-}
 
 export default Ticketing;
